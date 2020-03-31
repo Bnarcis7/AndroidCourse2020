@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">ANDROID Tema1</string>
+    <string name="txt_first_fragment_first_activity">Hello!</string>
+    <string name="btn_to_second_activity">GO TO SECOND ACTIVITY</string>
+    <string name="btn_open_meniu">OPEN MENU</string>
+    <string name="btn_option1">Replace this fragment with another one</string>
+    <string name="btn_option2">Remove the fragment from the left</string>
+    <string name="btn_option3">Close this activity</string>
+    <string name="txt_final">The End :)</string>
+
+</resources>
