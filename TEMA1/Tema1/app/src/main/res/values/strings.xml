@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">HomeworkNoOne</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="tv_F1A1">Hello there!</string>
+    <string name="btn_F1A1">Take me to F1A2</string>
+    <string name="tv_F2A2">I am your FATHER</string>
+    <string name="btn1_F2A2">Replace with F3A2</string>
+    <string name="btn2_F2A2">Remove F1A2</string>
+    <string name="btn3_F2A2">Close Activity</string>
+    <string name="tv_F1A2">I will not fail you!</string>
+    <string name="btn_F1A2">Add F2A2</string>
+    <string name="tv_F3A2"> You must learn control!</string>
+    <string name="btn_F3A2">Take me to F1A1</string>
+
+
+</resources>
