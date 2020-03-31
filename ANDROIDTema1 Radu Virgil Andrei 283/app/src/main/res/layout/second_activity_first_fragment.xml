@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/second_activity_first_fragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:id="@+id/left_frame"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@android:color/holo_red_light"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.5" />
+
+    <Button
+        android:id="@+id/btn_open_menu"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/btn_padding"
+        android:text="@string/btn_open_meniu"
+        app:layout_constraintBottom_toBottomOf="@id/left_frame"
+        app:layout_constraintCircleRadius="@dimen/btn_radius"
+        app:layout_constraintLeft_toLeftOf="@id/left_frame"
+        app:layout_constraintRight_toRightOf="@id/left_frame"
+        app:layout_constraintTop_toTopOf="@id/left_frame" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

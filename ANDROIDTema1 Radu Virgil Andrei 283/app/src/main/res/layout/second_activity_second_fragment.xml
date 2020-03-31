@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/second_activity_second_fragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:id="@+id/right_frame"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@android:color/holo_orange_light"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.5" />
+
+    <Button
+        android:id="@+id/btn_one"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/btn_padding"
+        android:text="@string/btn_option1"
+        android:textSize="@dimen/txt_size_normal"
+        app:layout_constraintBottom_toBottomOf="@id/right_frame"
+        app:layout_constraintCircleRadius="@dimen/btn_radius"
+        app:layout_constraintLeft_toLeftOf="@id/right_frame"
+        app:layout_constraintRight_toRightOf="@id/right_frame"
+        app:layout_constraintTop_toTopOf="@id/right_frame" />
+
+    <Button
+        android:id="@+id/btn_two"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/btn_padding"
+        android:text="@string/btn_option2"
+        android:textSize="@dimen/txt_size_normal"
+        app:layout_constraintCircleRadius="@dimen/btn_radius"
+        app:layout_constraintLeft_toLeftOf="@id/right_frame"
+        app:layout_constraintRight_toRightOf="@id/right_frame"
+        app:layout_constraintTop_toBottomOf="@id/btn_one" />
+
+    <Button
+        android:id="@+id/btn_three"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/btn_padding"
+        android:text="@string/btn_option3"
+        android:textSize="@dimen/txt_size_normal"
+        app:layout_constraintCircleRadius="@dimen/btn_radius"
+        app:layout_constraintLeft_toLeftOf="@id/right_frame"
+        app:layout_constraintRight_toRightOf="@id/right_frame"
+        app:layout_constraintTop_toBottomOf="@id/btn_two" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

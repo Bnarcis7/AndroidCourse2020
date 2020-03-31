@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="guide_line_top">200dp</dimen>
+    <dimen name="btn_padding">10dp</dimen>
+    <dimen name="txt_size_big">24sp</dimen>
+    <dimen name="txt_size_normal">18sp</dimen>
+    <dimen name="txt_size_small">12sp</dimen>
+    <dimen name="btn_radius">8dp</dimen>
+    <dimen name="frame_margin">10dp</dimen>
+
+
+</resources>
