@@ -1,8 +1,10 @@
-package com.example.doctorhowproject;
+package com.example.doctorhowproject.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.example.doctorhowproject.R;
 
 public class MainActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package com.example.doctorhowproject;
+package com.example.doctorhowproject.Fragments;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +16,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.example.doctorhowproject.Models.User;
+import com.example.doctorhowproject.R;
 
 
 /**

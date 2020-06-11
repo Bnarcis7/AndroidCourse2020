@@ -1,4 +1,4 @@
-package com.example.doctorhowproject;
+package com.example.doctorhowproject.Fragments;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +16,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.example.doctorhowproject.R;
 
 
 public class LoginFragment extends Fragment {
@@ -40,6 +42,7 @@ public class LoginFragment extends Fragment {
         clickListener();
         return view;
     }
+
 
     private void clickListener() {
         mSignInBtn.setOnClickListener(new View.OnClickListener() {
