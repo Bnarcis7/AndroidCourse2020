@@ -32,6 +32,22 @@ public class RegisterFragment extends RoboFragment {
     @InjectView(R.id.email_txt) EditText mEmailTxt;
     @InjectView(R.id.password_txt) EditText mPasswordTxt;
     @InjectView(R.id.name_txt) EditText mNameTxt;
+
+import com.example.doctorhowproject.Activities.HomePageActivity;
+import com.example.doctorhowproject.Models.User;
+import com.example.doctorhowproject.R;
+
+
+
+public class RegisterFragment extends Fragment {
+    //@InjectView(R.id.sign_up_btn)
+    //@InjectView(R.id.email_txt)
+    //@InjectView(R.id.password_txt)
+    //@InjectView(R.id.name_txt)
+    Button mSignUpBtn;
+    EditText mEmailTxt;
+    EditText mPasswordTxt;
+    EditText mNameTxt;
     private FragmentActivity mActivity;
 
     @Override

@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import com.example.doctorhowproject.Activities.HomePageActivity;
 import com.example.doctorhowproject.Database.DbUtility;
 import com.example.doctorhowproject.Database.GenericConstants;
@@ -27,6 +28,20 @@ public class LoginFragment extends RoboFragment {
     @InjectView(R.id.email_txt) EditText mEmailTxt;
     @InjectView(R.id.password_txt) EditText mPasswordTxt;
     @InjectView(R.id.login_btn) Button mSignInBtn;
+
+
+import com.example.doctorhowproject.Activities.HomePageActivity;
+import com.example.doctorhowproject.R;
+
+
+public class LoginFragment extends Fragment {
+   // @InjectView(R.id.email_txt)
+  //  @InjectView(R.id.password_txt)
+  //  @InjectView(R.id.sign_in_btn)
+    Button mSignInBtn;
+    EditText mPasswordTxt;
+    EditText mEmailTxt;
+
     private FragmentActivity mActivity;
 
     @Override

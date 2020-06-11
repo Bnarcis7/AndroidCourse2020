@@ -3,6 +3,7 @@ package com.example.doctorhowproject.Activities;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
 import android.view.View;
 import android.widget.Button;
 
@@ -10,38 +11,22 @@ import com.example.doctorhowproject.Fragments.LoginFragment;
 import com.example.doctorhowproject.Fragments.RegisterFragment;
 import com.example.doctorhowproject.R;
 
-import roboguice.activity.RoboActivity;
-import roboguice.inject.InjectView;
 
-public class MainActivity extends RoboActivity {
-
-    @InjectView(R.id.login_btn)
-    protected Button loginBtn;
-    @InjectView(R.id.register_btn)
-    protected Button registerBtn;
+public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        clickListener();
+
+        goToLogin();
     }
 
-    private void clickListener() {
-        loginBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getFragmentManager().beginTransaction().add(R.id.fragment_container
-                        , new LoginFragment()).commit();
-            }
-        });
+    private void goToLogin() {
+        LoginFragment fragment = new LoginFragment();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.activity_main, fragment, "login_fragment")
+                .commit();
 
-        registerBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getFragmentManager().beginTransaction().add(R.id.fragment_container
-                        , new RegisterFragment()).commit();
-            }
-        });
     }
 }
