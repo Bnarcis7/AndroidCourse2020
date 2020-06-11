@@ -16,10 +16,10 @@ public class MainActivity extends AppCompatActivity {
         goToLogin();
     }
 
-    private void goToLogin(){
-        LoginFragment fragment=new LoginFragment();
+    private void goToLogin() {
+        LoginFragment fragment = new LoginFragment();
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.activity_main,fragment,"login_fragment")
+                .replace(R.id.activity_main, fragment, "login_fragment")
                 .commit();
     }
 }
