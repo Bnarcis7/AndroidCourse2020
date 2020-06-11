@@ -1,17 +1,43 @@
 package com.example.doctorhowproject.Models;
 
+import java.io.Serializable;
+import java.util.Objects;
+
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 import io.realm.annotations.Required;
 
-public class User  extends RealmObject {
+public class User  extends RealmObject implements Serializable {
+    @PrimaryKey
+    private Integer id;
+
     @Required
     private String email;
+
     @Required
     private String password;
+
     @Required
     private String name;
 
 
+    private UserType type;
+
+    public User(){} // default ctor
+
+    public User(String email,String password){
+        this.email=email;
+        this.password=password;
+        this.type=new UserType("user");
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getEmail() {
         return email;
@@ -35,5 +61,29 @@ public class User  extends RealmObject {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public UserType getType() {
+        return type;
+    }
+
+    public void setType(UserType type) {
+        this.type = type;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+        return email.equals(user.email) &&
+                password.equals(user.password);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(email, password);
     }
 }

@@ -14,9 +14,6 @@ import com.example.doctorhowproject.R;
 
 public class ListingsFragment extends Fragment {
 
-
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
