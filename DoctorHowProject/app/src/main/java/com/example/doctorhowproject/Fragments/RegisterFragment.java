@@ -1,9 +1,9 @@
 package com.example.doctorhowproject.Fragments;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -15,107 +15,125 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
+
 import com.example.doctorhowproject.Activities.HomePageActivity;
-import com.example.doctorhowproject.Database.BaseUtility;
-import com.example.doctorhowproject.Database.DbConstants;
-import com.example.doctorhowproject.Database.DbUtility;
 import com.example.doctorhowproject.Database.GenericConstants;
 import com.example.doctorhowproject.Models.User;
 import com.example.doctorhowproject.R;
-import roboguice.fragment.provided.RoboFragment;
-import roboguice.inject.InjectView;
 
+import org.w3c.dom.Text;
 
-public class RegisterFragment extends RoboFragment {
-    @InjectView(R.id.register_btn) Button mSignUpBtn;
-    @InjectView(R.id.email_txt) EditText mEmailTxt;
-    @InjectView(R.id.password_txt) EditText mPasswordTxt;
-    @InjectView(R.id.name_txt) EditText mNameTxt;
-
-import com.example.doctorhowproject.Activities.HomePageActivity;
-import com.example.doctorhowproject.Models.User;
-import com.example.doctorhowproject.R;
-
-
+import io.realm.Realm;
 
 public class RegisterFragment extends Fragment {
-    //@InjectView(R.id.sign_up_btn)
-    //@InjectView(R.id.email_txt)
-    //@InjectView(R.id.password_txt)
-    //@InjectView(R.id.name_txt)
-    Button mSignUpBtn;
-    EditText mEmailTxt;
-    EditText mPasswordTxt;
-    EditText mNameTxt;
+    private TextView mEmail;
+    private TextView mPassword;
+    private TextView mName;
+    private Realm realm;
     private FragmentActivity mActivity;
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        mActivity = (FragmentActivity) getActivity();
-    }
-
-    @Nullable
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_register, container, false);
-        clickListener();
-        return view;
+        mActivity = getActivity();
+        realm = Realm.getDefaultInstance(); // GET AN INSTANCE FOR THIS THREAD ONLY!
+        return inflater.inflate(R.layout.fragment_register, container, false);
     }
 
-    private void clickListener() {
-        mSignUpBtn.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        //GET TEXT VIEWS
+        mEmail=mActivity.findViewById(R.id.register_email_txt);
+        mPassword=mActivity.findViewById(R.id.register_password_txt);
+        mName=mActivity.findViewById(R.id.register_name_txt);
+
+        //GET BUTTONS
+        Button registerBtn = mActivity.findViewById(R.id.register_btn);
+        Button backBtn= mActivity.findViewById(R.id.register_back_btn);
+
+        registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                String validationResponse = validateFields();
-                if (validationResponse.equals(GenericConstants.SUCCESS)) {
-                    boolean isCreated = createUser();
-                    if (isCreated) {
-                        Intent intent = new Intent(mActivity, HomePageActivity.class);
-                        intent.putExtra(DbConstants.EMAIL_KEY, mEmailTxt.getText().toString());
-                        startActivity(intent);
-                        mActivity.finish();
-                    } else {
-                        Toast.makeText(mActivity, GenericConstants.OPERATION_FAILED, Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(mActivity, validationResponse, Toast.LENGTH_SHORT).show();
+            public void onClick(View view) {
+                if(validateFields()){
+                    User user=new User();
+                    user.setEmail(mEmail.getText().toString());
+                    user.setPassword(mPassword.getText().toString());
+                    user.setName(mName.getText().toString());
+                    addUser(user);
+
                 }
             }
         });
+
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToLogin();
+            }
+        });
+
     }
 
-    private boolean createUser() {
-        User user = new User();
-        user.setEmail(mEmailTxt.getText().toString());
-        BaseUtility baseUtility = new BaseUtility();
-        String encryptedPassword = baseUtility.encrypt(mPasswordTxt.getText().toString());
-        user.setPassword(encryptedPassword);
-        user.setName(mNameTxt.getText().toString());
-        DbUtility dbUtility = new DbUtility(mActivity);
-        return dbUtility.createUser(user);
-    }
 
-    private String validateFields() {
-        Editable email = mEmailTxt.getText();
-        Editable password = mPasswordTxt.getText();
-        Editable name = mNameTxt.getText();
-        DbUtility dbUtility = new DbUtility(mActivity);
+    private boolean validateFields() {
+        String email = mEmail.getText().toString();
+        String password = mPassword.getText().toString();
+        String name = mName.getText().toString();
 
-        if (email == null || email.toString().trim().length() == 0) {
-            return GenericConstants.NULL_FIELDS;
-        }else if (password == null || password.toString().trim().length() == 0) {
-            return GenericConstants.NULL_FIELDS;
-        } else if (name == null || name.toString().trim().length() == 0) {
-            return GenericConstants.NULL_FIELDS;
-        } else if (!Patterns.EMAIL_ADDRESS.matcher(email.toString()).matches()) {
-            return GenericConstants.INCORRECT_EMAIL;
-        } else if (dbUtility.isUserExist(email.toString())) {
-            return GenericConstants.USER_ALREADY_EXIST;
-        } else {
-            return GenericConstants.SUCCESS;
+        if (email.toString().trim().length() == 0) {
+            Toast.makeText(this.getContext(),GenericConstants.NULL_FIELDS,Toast.LENGTH_LONG).show();
+            return false;
         }
 
+        if (password.toString().trim().length() == 0) {
+            Toast.makeText(this.getContext(),GenericConstants.NULL_FIELDS,Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        if (name.toString().trim().length() == 0) {
+            Toast.makeText(this.getContext(),GenericConstants.NULL_FIELDS,Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        if (!Patterns.EMAIL_ADDRESS.matcher(email.toString()).matches()) {
+            Toast.makeText(this.getContext(),GenericConstants.INCORRECT_EMAIL,Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        Toast.makeText(this.getContext(),GenericConstants.SUCCESS,Toast.LENGTH_LONG).show();
+        return true;
+    }
+
+    private void addUser(final User user){
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                //FIND MAX ID IN USER TABLE
+                Number currentIdNum = realm.where(User.class).max("id");
+                int nextId;
+                //IF THERE IS NONE IN THE DATABASE THE ID IS 1, ELSE ITS THE NEXT NUMBER
+                if(currentIdNum == null) {
+                    nextId = 1;
+                } else {
+                    nextId = currentIdNum.intValue() + 1;
+                }
+
+                user.setId(nextId);
+                realm.insertOrUpdate(user);
+            }
+        });
+        Toast.makeText(this.getContext(),GenericConstants.USER_ADDED,Toast.LENGTH_LONG).show();
+    }
+
+
+
+    private void goToLogin(){
+        LoginFragment fragment=new LoginFragment();
+        mActivity.getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container,fragment,"login_fragment")
+                .commit();
     }
 }
