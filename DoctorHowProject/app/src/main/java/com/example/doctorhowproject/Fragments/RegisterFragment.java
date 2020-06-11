@@ -1,4 +1,4 @@
-package com.example.doctorhowproject;
+package com.example.doctorhowproject.Fragments;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,22 +16,22 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import com.example.doctorhowproject.Activities.HomePageActivity;
+import com.example.doctorhowproject.Database.BaseUtility;
+import com.example.doctorhowproject.Database.DbConstants;
+import com.example.doctorhowproject.Database.DbUtility;
+import com.example.doctorhowproject.Database.GenericConstants;
+import com.example.doctorhowproject.Models.User;
+import com.example.doctorhowproject.R;
+import roboguice.fragment.provided.RoboFragment;
+import roboguice.inject.InjectView;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link RegisterFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class RegisterFragment extends Fragment {
-    //@InjectView(R.id.sign_up_btn)
-    //@InjectView(R.id.email_txt)
-    //@InjectView(R.id.password_txt)
-    //@InjectView(R.id.name_txt)
-    Button mSignUpBtn;
-    EditText mEmailTxt;
-    EditText mPasswordTxt;
-    EditText mNameTxt;
+public class RegisterFragment extends RoboFragment {
+    @InjectView(R.id.register_btn) Button mSignUpBtn;
+    @InjectView(R.id.email_txt) EditText mEmailTxt;
+    @InjectView(R.id.password_txt) EditText mPasswordTxt;
+    @InjectView(R.id.name_txt) EditText mNameTxt;
     private FragmentActivity mActivity;
 
     @Override
