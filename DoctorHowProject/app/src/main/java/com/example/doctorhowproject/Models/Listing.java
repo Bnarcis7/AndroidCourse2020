@@ -1,13 +1,12 @@
 package com.example.doctorhowproject.Models;
 
+import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
 public class Listing extends RealmObject {
     @PrimaryKey
     private Integer id;
-
-    private String imgURL;
 
     private User owner;
 
@@ -16,6 +15,16 @@ public class Listing extends RealmObject {
     private String phone;
 
     private String title;
+
+    private RealmList<ListingImage> listingImages;
+
+    public RealmList<ListingImage> getListingImages() {
+        return listingImages;
+    }
+
+    public void setListingImages(RealmList<ListingImage> listingImages) {
+        this.listingImages = listingImages;
+    }
 
     public String getTitle() {
         return title;
@@ -31,14 +40,6 @@ public class Listing extends RealmObject {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public String getImgURL() {
-        return imgURL;
-    }
-
-    public void setImgURL(String imgURL) {
-        this.imgURL = imgURL;
     }
 
     public User getOwner() {
@@ -65,9 +66,20 @@ public class Listing extends RealmObject {
         this.phone = phone;
     }
 
-    public Listing(){}
-
-    public Listing(String title){
-        this.title=title;
+    public Listing(){
     }
+
+    public Listing(String title,RealmList<ListingImage> images){
+        this.title=title;
+        this.listingImages=images;
+    }
+
+    public Listing(String title,RealmList<ListingImage> images,String phone,User owner,String details){
+        this.title=title;
+        this.phone=phone;
+        this.owner=owner;
+        this.details=details;
+        this.listingImages=images;
+    }
+
 }
