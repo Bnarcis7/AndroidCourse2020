@@ -17,7 +17,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.doctorhowproject.Activities.HomePageActivity;
-import com.example.doctorhowproject.Database.GenericConstants;
+import com.example.doctorhowproject.Utils.GenericConstants;
 import com.example.doctorhowproject.Models.User;
 import com.example.doctorhowproject.R;
 
