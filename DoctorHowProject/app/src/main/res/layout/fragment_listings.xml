@@ -4,13 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/holo_purple"
+    android:id="@+id/fragment_listings"
     tools:context=".Fragments.ListingsFragment">
 
-
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_listings"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="LISTINGS FRAGMENT TEST"
-        android:gravity="center"/>
+        android:layout_height="match_parent"/>
+
+
 
 </RelativeLayout>

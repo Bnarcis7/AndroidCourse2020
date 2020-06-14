@@ -8,7 +8,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
-import android.text.Editable;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +17,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.doctorhowproject.Activities.HomePageActivity;
-import com.example.doctorhowproject.Activities.MainActivity;
 import com.example.doctorhowproject.Database.GenericConstants;
 import com.example.doctorhowproject.Models.User;
 import com.example.doctorhowproject.R;
@@ -44,6 +42,7 @@ public class LoginFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         //GET THE PASSWORD AND EMAIL TEXT VIEWS
         mPasswordTxt = (EditText) mActivity.findViewById(R.id.password_txt);
         mEmailTxt = (EditText) mActivity.findViewById(R.id.email_txt);
@@ -56,10 +55,17 @@ public class LoginFragment extends Fragment {
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (validateFields()) {
-                    User user = new User(mEmailTxt.getText().toString(), mPasswordTxt.getText().toString());
-                    goToHomePage(user);
+                User user=validateFields();
+                if(user!=null){
+                    //REPLACE THE USER WITH ONLY EMAIL AND PASSWORD WITH THE ONE FROM DB WITH ALL INFO
+                    user=findUserByEmailPassword(user);
+                    if(user!=null) {
+                        goToHomePage(user);
+                        return;
+                    }
+                    Toast.makeText(getContext(), GenericConstants.USER_NOT_EXIST, Toast.LENGTH_LONG).show();
                 }
+
             }
         });
 
@@ -78,53 +84,51 @@ public class LoginFragment extends Fragment {
         realm.close();//CLOSE THE INSTANCE WHEN THIS FRAGMENT IS DESTROYED
     }
 
-    private boolean validateFields() {
-        String email = mEmailTxt.getText().toString();
-        String password = mPasswordTxt.getText().toString();
+    private User validateFields() {
+        String email = mEmailTxt.getText().toString().trim();
+        String password = mPasswordTxt.getText().toString().trim();
 
-        if (email.trim().length() == 0) {
+        if (email.length() == 0) {
             Toast.makeText(this.getContext(), GenericConstants.NULL_FIELDS, Toast.LENGTH_LONG).show();
-            return false;
+            return null;
         }
 
-        if (password.trim().length() == 0) {
+        if (password.length() == 0) {
             Toast.makeText(this.getContext(), GenericConstants.NULL_FIELDS, Toast.LENGTH_LONG).show();
-            return false;
+            return null;
         }
 
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             Toast.makeText(this.getContext(), GenericConstants.INCORRECT_EMAIL, Toast.LENGTH_LONG).show();
-            return false;
+            return null;
         }
-        //MAKE A NEW USER OBJECT AND TRY TO FIND IT IN THE DATABASE
-        User user = new User(email, password);
-        if (findUser(user) == null) {
-            Toast.makeText(this.getContext(), GenericConstants.USER_NOT_EXIST, Toast.LENGTH_LONG).show();
-            return false;
-        }
-        //IF ALL CONDITIONS ARE NULL, LOGIN IS SUCCESSFULLY
-        return true;
-
+        //IF ALL CONDITIONS ARE FALSE (NOTHING IS WRONG WITH THE FIELDS)
+        //MAKE A NEW USER OBJECT AND RETURN IT
+        return new User(email, password);
     }
 
-    private User findUser(final User user) {
+    private User findUserByEmailPassword(final User user) {
+        //SEARCH FOR THIS USER IN DB
         RealmResults<User> query = realm.where(User.class)
                 .equalTo("email", user.getEmail())
                 .equalTo("password", user.getPassword())
-                .findAllAsync();
-
+                .findAll();
+        //IF THE QUERY IS EMPTY THAT MEANS THERE IS NO USER WITH THE SAME EMAIL/PASSWORD
         if (query.isLoaded()) {
             if (query.size() == 0)
                 return null;
-            return query.get(0);
+            else{
+                return query.get(0);
+            }
         }
-
+        //SOMETHING WENT WRONG SO RETURN FALSE
         return null;
     }
 
     private void goToHomePage(User user) {
         Intent intent = new Intent(mActivity, HomePageActivity.class);
-        intent.putExtra("user", user);
+        //PASS USER ID TO THE NEXT ACTIVITY
+        intent.putExtra("userId", user.getId());
         mActivity.startActivity(intent);
     }
 
