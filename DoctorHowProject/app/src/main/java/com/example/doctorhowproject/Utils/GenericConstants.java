@@ -1,4 +1,4 @@
-package com.example.doctorhowproject.Database;
+package com.example.doctorhowproject.Utils;
 
 public class GenericConstants {
 
@@ -8,7 +8,9 @@ public class GenericConstants {
     public static final String INCORRECT_DATA = "The email or password is not correct";
     public static final String USER_ALREADY_EXIST = "User already exist";
     public static final String USER_NOT_EXIST = "User not found";
-    public static final String SUCCESS = "success";
+    public static final String SUCCESS = "Success";
     public static final String READ_USER_FAILED = "Unable to fetch userDetails";
     public static final String USER_ADDED ="User added into database";
+    public static final String LISTING_IMAGE_ADDED ="Listing image added into database";
+
 }
