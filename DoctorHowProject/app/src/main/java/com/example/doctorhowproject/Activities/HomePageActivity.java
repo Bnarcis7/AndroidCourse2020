@@ -4,8 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-import com.example.doctorhowproject.Adapters.ListingsAdapter;
-import com.example.doctorhowproject.Models.Listing;
+import com.example.doctorhowproject.Fragments.HomeDefaultFragment;
 import com.example.doctorhowproject.Models.User;
 import com.example.doctorhowproject.R;
 
@@ -21,7 +20,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.doctorhowproject.Fragments.FavoritesFragment;
-import com.example.doctorhowproject.Fragments.ListingsFragment;
 import com.example.doctorhowproject.Fragments.UserProfileFragment;
 import com.google.android.material.navigation.NavigationView;
 
@@ -32,7 +30,7 @@ import io.realm.RealmResults;
 
 public class HomePageActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
-    private User user;
+    public  User user;
     private Realm realm;
 
     @Override
@@ -70,7 +68,7 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
 
 
     private void openListingsFragment() {
-        ListingsFragment fragment = new ListingsFragment();
+        HomeDefaultFragment fragment = new HomeDefaultFragment();
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, fragment, "listings_fragment")
                 .commit();
@@ -107,9 +105,9 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
             }
 
             case R.id.nav_home: {
-                ListingsFragment fragment = new ListingsFragment();
+                HomeDefaultFragment fragment = new HomeDefaultFragment();
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, fragment, "listing_fragment")
+                        .replace(R.id.fragment_container, fragment, "home_fragment")
                         .commit();
                 break;
             }
