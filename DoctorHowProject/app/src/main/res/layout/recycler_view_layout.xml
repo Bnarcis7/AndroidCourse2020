@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardElevation="@dimen/cardview_default_elevation"
+    android:background="@color/colorAccent"
     app:cardCornerRadius="@dimen/cardview_default_radius"
     android:layout_margin="10dp"
     android:padding="10dp"
