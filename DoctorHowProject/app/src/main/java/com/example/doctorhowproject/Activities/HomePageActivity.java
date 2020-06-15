@@ -41,6 +41,7 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
        
         super.onCreate(savedInstanceState);
         //testNarcis
+        //test master
         setContentView(R.layout.activity_home_page);
         mRealm = Realm.getDefaultInstance();
 
