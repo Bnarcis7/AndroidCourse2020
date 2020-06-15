@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:text="Next"
             app:layout_constraintTop_toBottomOf="@id/listing_images"
-            android:background="@drawable/mybutton"
+            android:background="@drawable/my_button"
 
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
