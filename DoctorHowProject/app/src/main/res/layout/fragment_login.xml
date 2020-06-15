@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+
     android:id="@+id/login_fragment"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".Fragments.LoginFragment"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorAccent"
-    android:padding="20dp">
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    android:padding="20dp"
+    tools:context=".Fragments.LoginFragment">
+
 
     <EditText
         android:id="@+id/email_txt"
@@ -43,5 +49,11 @@
         android:text="Register"
         android:textColor="@android:color/black"
         android:layout_gravity="center"/>
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="393dp"
+        tools:src="@drawable/doctor" />
 
 </LinearLayout>
