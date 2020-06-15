@@ -35,6 +35,7 @@ public class RegisterFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mActivity = getActivity();
         realm = Realm.getDefaultInstance(); // GET AN INSTANCE FOR THIS THREAD ONLY!
+
         realm.refresh();
         return inflater.inflate(R.layout.fragment_register, container, false);
     }
@@ -57,6 +58,9 @@ public class RegisterFragment extends Fragment {
             public void onClick(View view) {
                 if (validateFields()) {
                     User user = new User();
+                    user.setEmail(mEmail.getText().toString());
+                    user.setPassword(mPassword.getText().toString());
+                    user.setName(mName.getText().toString());
                     user.setEmail(mEmail.getText().toString().trim());
                     user.setPassword(mPassword.getText().toString().trim());
                     user.setName(mName.getText().toString().trim());
@@ -72,6 +76,38 @@ public class RegisterFragment extends Fragment {
                 goToLogin();
             }
         });
+
+    }
+
+
+    private boolean validateFields() {
+        String email = mEmail.getText().toString().trim();
+        String password = mPassword.getText().toString().trim();
+        String name = mName.getText().toString().trim();
+
+        if (email.length() == 0) {
+            Toast.makeText(this.getContext(), GenericConstants.NULL_FIELDS, Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        if (password.length() == 0) {
+            Toast.makeText(this.getContext(), GenericConstants.NULL_FIELDS, Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        if (name.length() == 0) {
+            Toast.makeText(this.getContext(), GenericConstants.NULL_FIELDS, Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            Toast.makeText(this.getContext(), GenericConstants.INCORRECT_EMAIL, Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        Toast.makeText(this.getContext(), GenericConstants.SUCCESS, Toast.LENGTH_LONG).show();
+        return true;
+    }
 
     }
 
@@ -134,6 +170,7 @@ public class RegisterFragment extends Fragment {
         mActivity.getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, fragment, "login_fragment")
                 .commit();
+
     }
 
     @Override

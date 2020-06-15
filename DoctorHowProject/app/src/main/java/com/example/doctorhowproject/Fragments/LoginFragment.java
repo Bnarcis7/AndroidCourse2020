@@ -35,6 +35,7 @@ public class LoginFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mActivity = getActivity();
         realm = Realm.getDefaultInstance();
+
         realm.refresh();
         return inflater.inflate(R.layout.fragment_login, container, false);
     }
@@ -116,6 +117,11 @@ public class LoginFragment extends Fragment {
                 .findAll();
         //IF THE QUERY IS EMPTY THAT MEANS THERE IS NO USER WITH THE SAME EMAIL/PASSWORD
         if (query.isLoaded()) {
+            if (query.size() == 0)
+                return null;
+            else{
+                return query.get(0);
+            }
             if(query.size() == 0){
                 return null;
             }

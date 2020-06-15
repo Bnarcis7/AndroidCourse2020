@@ -2,12 +2,21 @@ package com.example.doctorhowproject.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
+import android.app.Application;
+import android.os.Bundle;
+
+import android.view.View;
+import android.widget.Button;
 
 import android.os.Bundle;
 
 
 import com.example.doctorhowproject.Fragments.LoginFragment;
 import com.example.doctorhowproject.R;
+
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
 
 
 public class MainActivity extends AppCompatActivity {
