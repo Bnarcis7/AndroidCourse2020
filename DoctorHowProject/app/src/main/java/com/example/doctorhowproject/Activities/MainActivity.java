@@ -9,8 +9,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import android.os.Bundle;
+
+
 import com.example.doctorhowproject.Fragments.LoginFragment;
-import com.example.doctorhowproject.Fragments.RegisterFragment;
 import com.example.doctorhowproject.R;
 
 import io.realm.Realm;

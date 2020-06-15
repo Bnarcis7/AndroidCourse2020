@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     android:id="@+id/fragment_register"
     android:background="@color/colorAccent"
+    android:background="@android:color/holo_blue_light"
     android:padding="20dp">
 
     <EditText
@@ -48,6 +49,7 @@
         android:background="@drawable/mybutton"
         android:text="Back"
         android:layout_marginTop="3dp"
+        android:text="Back"
         android:layout_gravity="center"/>
 
 </LinearLayout>
