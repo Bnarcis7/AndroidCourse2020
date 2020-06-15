@@ -1,6 +1,7 @@
 package com.example.doctorhowproject.Fragments;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -10,8 +11,6 @@ import androidx.fragment.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 
 import android.widget.ImageView;
@@ -27,12 +26,7 @@ public class ListingFragment extends Fragment {
 
     private User mUser;
     private Listing mListing;
-    private ArrayList<Bitmap> images;
     private FragmentActivity mActivity;
-
-    public ListingFragment() {
-
-    }
 
     public ListingFragment(User user, Listing listing) {
         this.mUser = user;
@@ -50,30 +44,12 @@ public class ListingFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Button btnNext=mActivity.findViewById(R.id.btn_img_next);
+        Button btnNext = mActivity.findViewById(R.id.btn_img_next);
         TextView title = mActivity.findViewById(R.id.listing_title);
-        final ImageView imageView =mActivity.findViewById(R.id.listing_images);
-
-        //TODO FIX STUFF HERE
-        Animation in = AnimationUtils.loadAnimation(getContext(),R.anim.in);
-        Animation out=AnimationUtils.loadAnimation(getContext(),R.anim.out);
-
-        imageView.setAnimation(in);
-
-        final int[] i = {0};
-        btnNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                imageView.setImageBitmap(images.get(i[0] %images.size()));
-                i[0]++;
-            }
-        });
-
-
+        ImageView imageView = mActivity.findViewById(R.id.listing_images);
 
         title.setText(mListing.getTitle());
+        Bitmap bmImg = BitmapFactory.decodeFile(mListing.getImagesPaths().get(0));
+        imageView.setImageBitmap(bmImg);
     }
-
-
-
 }

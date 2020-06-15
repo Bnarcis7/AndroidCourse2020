@@ -20,6 +20,7 @@ import androidx.fragment.app.Fragment;
 
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,7 @@ import android.widget.Toast;
 
 import com.example.doctorhowproject.Activities.HomePageActivity;
 import com.example.doctorhowproject.Application.MyApplication;
+import com.example.doctorhowproject.Models.User;
 import com.example.doctorhowproject.Utils.GenericConstants;
 import com.example.doctorhowproject.Models.Listing;
 import com.example.doctorhowproject.R;
@@ -52,20 +54,22 @@ import io.realm.Realm;
 
 public class NewListingFragment extends Fragment {
 
-    private Listing mNewListing;
-
-    private HomePageActivity mActivity;
     private EditText mTitle;
     private EditText mPhone;
     private EditText mDetails;
-    private Realm realm;
-
+    private Listing mNewListing;
+    private File mDestinationFolder;
+    private ArrayList<Bitmap> mImages;
+    private HomePageActivity mActivity;
+    private Realm mRealm;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater,
+                             ViewGroup container,
                              Bundle savedInstanceState) {
         mActivity = (HomePageActivity) getActivity();
-        realm = Realm.getDefaultInstance();
+        mRealm = Realm.getDefaultInstance();
+        mRealm.refresh();
         return inflater.inflate(R.layout.fragment_new_listing, container, false);
     }
 
@@ -76,16 +80,16 @@ public class NewListingFragment extends Fragment {
         mTitle = mActivity.findViewById(R.id.new_listing_title);
         mPhone = mActivity.findViewById(R.id.new_listing_phone);
         mDetails = mActivity.findViewById(R.id.new_listing_details);
-        mDestinationFolder = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES), "DoctorHowImagesFolder");
-
         mImages = new ArrayList<>();
-
-        Button imagePickBtn = mActivity.findViewById(R.id.new_listing_images_btn);
-        FloatingActionButton finishBtn = mActivity.findViewById(R.id.floating_button_finish);
 
         mNewListing = new Listing();
         setListingId();
+
+        mDestinationFolder = new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES), "DoctorHowImagesFolder");
+
+        Button imagePickBtn = mActivity.findViewById(R.id.new_listing_images_btn);
+        FloatingActionButton finishBtn = mActivity.findViewById(R.id.floating_button_finish);
 
         imagePickBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,24 +102,21 @@ public class NewListingFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (validateFields()) {
-//                    mNewListing.setOwner(mActivity.user);
-//                    mNewListing.setTitle(mTitle.getText().toString().trim());
-//                    mNewListing.setPhone(mPhone.getText().toString().trim());
-//                    mNewListing.setDetails(mDetails.getText().toString().trim());
-//                    addListing(mNewListing);
-                    for(Bitmap i : mImages){
+                    mNewListing.setOwner(mActivity.getUser());
+                    mNewListing.setTitle(mTitle.getText().toString().trim());
+                    mNewListing.setPhone(mPhone.getText().toString().trim());
+                    mNewListing.setDetails(mDetails.getText().toString().trim());
+                    mNewListing.setOwner(mActivity.getUser());
+
+                    for (Bitmap i : mImages) {
                         saveImage(i);
                     }
+
+                    addListing(mNewListing);
+                    goToHome();
                 }
             }
         });
-    }
-
-    private void pickFromGallery() {
-
-        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-        photoPickerIntent.setType("image/*");
-        startActivityForResult(photoPickerIntent, 1);
     }
 
     @Override
@@ -135,7 +136,12 @@ public class NewListingFragment extends Fragment {
                 }
             }
         }
+    }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mRealm.close();
     }
 
     private boolean validateFields() {
@@ -144,123 +150,135 @@ public class NewListingFragment extends Fragment {
         String details = mDetails.getText().toString().trim();
 
         if (title.length() == 0) {
-            Toast.makeText(this.getContext(), GenericConstants.NULL_FIELDS, Toast.LENGTH_LONG).show();
+            Toast.makeText(this.getContext(),
+                    GenericConstants.NULL_FIELDS,
+                    Toast.LENGTH_LONG)
+                    .show();
             return false;
         }
 
-        if (phone.length() == 0) {
-            Toast.makeText(this.getContext(), GenericConstants.NULL_FIELDS, Toast.LENGTH_LONG).show();
+        if (!Patterns.PHONE.matcher(phone).matches()) {
+            Toast.makeText(this.getContext(),
+                    GenericConstants.INCORRECT_PHONE,
+                    Toast.LENGTH_LONG)
+                    .show();
             return false;
         }
 
         if (details.length() == 0) {
-            Toast.makeText(this.getContext(), GenericConstants.NULL_FIELDS, Toast.LENGTH_LONG).show();
+            Toast.makeText(this.getContext(),
+                    GenericConstants.NULL_FIELDS,
+                    Toast.LENGTH_LONG)
+                    .show();
             return false;
         }
 
         return true;
     }
 
-    private void addListing(final Listing listing) {
-        realm.executeTransactionAsync(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                //FIND MAX ID IN LISTING TABLE
-                Number currentIdNum = realm.where(Listing.class).max("id");
-                int nextId;
-
-                //IF THERE IS NONE IN THE DATABASE THE ID IS 1, ELSE ITS THE NEXT NUMBER
-                if (currentIdNum == null) {
-                    nextId = 1;
-                } else {
-                    nextId = currentIdNum.intValue() + 1;
-                }
-                //SET LISTING ID AND INSERT IT INTO DB
-                listing.setId(nextId);
-                realm.insertOrUpdate(listing);
-            }
-        });
-
-        Toast.makeText(this.getContext(), GenericConstants.USER_ADDED, Toast.LENGTH_LONG).show();
+    private void pickFromGallery() {
+        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+        photoPickerIntent.setType("image/*");
+        startActivityForResult(photoPickerIntent, 1);
     }
 
 
     private void setListingId() {
-        realm.executeTransactionAsync(new Realm.Transaction() {
+        mRealm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                //FIND MAX ID IN LISTING TABLE
-                Number currentIdNum = realm.where(Listing.class).max("id");
                 int nextId;
-
-                //IF THERE IS NONE IN THE DATABASE THE ID IS 1, ELSE ITS THE NEXT NUMBER
+                // Find max id in listing table
+                Number currentIdNum = realm.where(Listing.class)
+                        .max("id");
+                // If there is none, the id is 1, else its max id +1
                 if (currentIdNum == null) {
                     nextId = 1;
                 } else {
                     nextId = currentIdNum.intValue() + 1;
                 }
-
 
                 mNewListing.setId(nextId);
             }
         });
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        realm.close();
-    }
-
-
-    private File saveImage(Bitmap image){
-
-        if(ContextCompat.checkSelfPermission(mActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
-            if (! mDestinationFolder.exists()){
-                if (! mDestinationFolder.mkdirs()){
-                    Toast.makeText(getContext(), "Failed to mkdir "+mDestinationFolder.getPath(), Toast.LENGTH_SHORT).show();
-                    return null;
+    private void saveImage(Bitmap image) {
+        // Check if there is write permission and create destination folder
+        if (ContextCompat.checkSelfPermission(mActivity,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            if (!mDestinationFolder.exists()) {
+                if (!mDestinationFolder.mkdirs()) {
+                    Toast.makeText(getContext(),
+                            "Failed to mkdir " + mDestinationFolder.getPath(),
+                            Toast.LENGTH_SHORT)
+                            .show();
+                    return;
                 }
             }
-        }
-        else{
+        } else {
             requestStoragePermission();
         }
 
-
-        // Create a media file name
+        // Create a media file in which will copy the selected image by user
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         File mediaFile;
-
-
         mediaFile = new File(mDestinationFolder.getPath() + File.separator +
-                "IMG_"+ timeStamp + ".jpg");
+                "IMG_" + timeStamp + ".jpg");
 
+        // Copy image to media file
         try {
             FileOutputStream out = new FileOutputStream(mediaFile);
             image.compress(Bitmap.CompressFormat.JPEG, 90, out);
             out.flush();
             out.close();
-            Toast.makeText(getContext(),"Image "+image.toString()+" saved into "+mDestinationFolder.getPath()+" as "
-            +mediaFile.getName(),Toast.LENGTH_LONG).show();
-        }catch (Exception e){
-            Toast.makeText(getContext(),e.toString(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(),
+                    mDestinationFolder.getPath() + "/" + mediaFile.getName(),
+                    Toast.LENGTH_LONG)
+                    .show();
+        } catch (Exception e) {
+            Toast.makeText(getContext(),
+                    e.toString(),
+                    Toast.LENGTH_SHORT)
+                    .show();
+            return;
         }
 
-
-        return mediaFile;
+        // Add a new image path in the new listing made by user
+        String imgPath = mDestinationFolder.getPath() + "/" + mediaFile.getName();
+        mNewListing.getImagesPaths().add(imgPath);
     }
 
-    private void requestStoragePermission(){
-        if(ActivityCompat.shouldShowRequestPermissionRationale(mActivity,Manifest.permission.WRITE_EXTERNAL_STORAGE)){
+    private void addListing(final Listing listing) {
+        mRealm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.insertOrUpdate(listing);
+            }
+        });
+    }
+
+    private void goToHome(){
+        HomeDefaultFragment fragment=new HomeDefaultFragment();
+        mActivity.getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container,fragment)
+                .commit();
+    }
+
+    private void requestStoragePermission() {
+        // Code for permission check and show dialog in case there is none
+        if (ActivityCompat.shouldShowRequestPermissionRationale(mActivity,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             new AlertDialog.Builder(mActivity)
                     .setTitle("Permission needed")
-                    .setMessage("We need this permission so we can save this image in another folder for later use")
+                    .setMessage("We need this permission so we can save this image in the server side")
                     .setPositiveButton("ok", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             ActivityCompat.requestPermissions(mActivity,
-                                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},GenericConstants.WRITE_STORAGE_PERMISSION_CODE);
+                                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                    GenericConstants.WRITE_STORAGE_PERMISSION_CODE);
                         }
                     })
                     .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
@@ -269,10 +287,12 @@ public class NewListingFragment extends Fragment {
                             dialogInterface.dismiss();
                         }
                     })
-                    .create().show();
-        }
-        else{
-            ActivityCompat.requestPermissions(mActivity,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},1);
+                    .create()
+                    .show();
+        } else {
+            ActivityCompat.requestPermissions(mActivity,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    1);
         }
     }
 }
