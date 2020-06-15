@@ -38,8 +38,7 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // test git extensions
-        //test 2
+       
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_home_page);
