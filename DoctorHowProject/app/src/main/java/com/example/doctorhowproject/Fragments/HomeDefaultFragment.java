@@ -95,9 +95,4 @@ public class HomeDefaultFragment extends Fragment {
         });
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        realm.close();
-    }
 }

@@ -1,7 +1,5 @@
 package com.example.doctorhowproject.Models;
 
-import java.util.ArrayList;
-
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -17,6 +15,7 @@ public class Listing extends RealmObject {
     private String phone;
 
     private String title;
+
 
     private RealmList<String> imagesPaths;
 
@@ -71,6 +70,7 @@ public class Listing extends RealmObject {
     public Listing(){
     }
 
+
     public Listing(String title,RealmList<String> imagesPaths){
         this.imagesPaths=imagesPaths;
         this.title=title;
@@ -83,6 +83,7 @@ public class Listing extends RealmObject {
         this.phone=phone;
         this.owner=owner;
         this.details=details;
+
     }
 
 }

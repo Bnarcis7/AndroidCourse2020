@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
+
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Fragments.ListingFragment">
 
@@ -35,6 +37,8 @@
             android:layout_height="wrap_content"
             android:text="Next"
             app:layout_constraintTop_toBottomOf="@id/listing_images"
+            android:background="@drawable/mybutton"
+
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>

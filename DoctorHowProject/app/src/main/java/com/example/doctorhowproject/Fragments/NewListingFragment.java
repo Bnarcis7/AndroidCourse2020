@@ -12,6 +12,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -34,6 +35,7 @@ import com.example.doctorhowproject.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -51,13 +53,13 @@ import io.realm.Realm;
 public class NewListingFragment extends Fragment {
 
     private Listing mNewListing;
+
     private HomePageActivity mActivity;
     private EditText mTitle;
     private EditText mPhone;
     private EditText mDetails;
     private Realm realm;
-    private ArrayList<Bitmap> mImages;
-    private File mDestinationFolder;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -70,6 +72,7 @@ public class NewListingFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         mTitle = mActivity.findViewById(R.id.new_listing_title);
         mPhone = mActivity.findViewById(R.id.new_listing_phone);
         mDetails = mActivity.findViewById(R.id.new_listing_details);
@@ -109,6 +112,7 @@ public class NewListingFragment extends Fragment {
     }
 
     private void pickFromGallery() {
+
         Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
         photoPickerIntent.setType("image/*");
         startActivityForResult(photoPickerIntent, 1);
@@ -118,6 +122,7 @@ public class NewListingFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
+
             if (requestCode == 1) {
                 if (data != null) {
                     Uri uri = data.getData();
@@ -152,6 +157,7 @@ public class NewListingFragment extends Fragment {
             Toast.makeText(this.getContext(), GenericConstants.NULL_FIELDS, Toast.LENGTH_LONG).show();
             return false;
         }
+
         return true;
     }
 
@@ -178,6 +184,7 @@ public class NewListingFragment extends Fragment {
         Toast.makeText(this.getContext(), GenericConstants.USER_ADDED, Toast.LENGTH_LONG).show();
     }
 
+
     private void setListingId() {
         realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
@@ -192,6 +199,7 @@ public class NewListingFragment extends Fragment {
                 } else {
                     nextId = currentIdNum.intValue() + 1;
                 }
+
 
                 mNewListing.setId(nextId);
             }
