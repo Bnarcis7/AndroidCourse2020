@@ -13,7 +13,6 @@ import com.example.doctorhowproject.R;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
-
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -43,12 +42,10 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
         setContentView(R.layout.activity_home_page);
         realm = Realm.getDefaultInstance();
 
-
         String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
             requestPermissions(permissions, 1);
-
 
         //GET THE USER ID I PASSED IN THE INTENT
         int id = (int) getIntent().getSerializableExtra("userId");
