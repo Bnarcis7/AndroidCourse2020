@@ -1,35 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".Fragments.LoginFragment"
-    android:orientation="vertical"
+    android:id="@+id/login_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="20dp">
+    android:background="@color/colorAccent"
+    android:orientation="vertical"
+    android:padding="20dp"
+    tools:context=".Fragments.LoginFragment">
 
     <EditText
         android:id="@+id/email_txt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
         android:hint="Email"
         android:paddingLeft="20dp"
-        android:layout_marginTop="40dp"/>
+        android:textColor="@android:color/black" />
 
     <EditText
         android:id="@+id/password_txt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:hint="Password"
         android:paddingLeft="20dp"
-        android:layout_marginTop="10dp"/>
+        android:textColor="@android:color/black"
+        />
 
     <Button
         android:id="@+id/login_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="LogIn"
-        android:textColor="#fff"
         android:layout_gravity="center"
-        android:layout_marginTop="30dp"/>
+        android:layout_marginTop="30dp"
+        android:background="@drawable/mybutton"
+        android:text="LogIn"
+        android:textColor="@android:color/black" />
+
+    <Button
+        android:id="@+id/register_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="3dp"
+        android:background="@drawable/mybutton"
+        android:text="Register"
+        android:textColor="@android:color/black" />
 
 </LinearLayout>
