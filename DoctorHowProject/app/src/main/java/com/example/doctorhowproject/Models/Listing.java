@@ -16,14 +16,15 @@ public class Listing extends RealmObject {
 
     private String title;
 
-    private RealmList<ListingImage> listingImages;
 
-    public RealmList<ListingImage> getListingImages() {
-        return listingImages;
+    private RealmList<String> imagesPaths;
+
+    public RealmList<String> getImagesPaths() {
+        return imagesPaths;
     }
 
-    public void setListingImages(RealmList<ListingImage> listingImages) {
-        this.listingImages = listingImages;
+    public void setImagesPaths(RealmList<String> imagesPaths) {
+        this.imagesPaths = imagesPaths;
     }
 
     public String getTitle() {
@@ -69,17 +70,20 @@ public class Listing extends RealmObject {
     public Listing(){
     }
 
-    public Listing(String title,RealmList<ListingImage> images){
+
+    public Listing(String title,RealmList<String> imagesPaths){
+        this.imagesPaths=imagesPaths;
         this.title=title;
-        this.listingImages=images;
+
     }
 
-    public Listing(String title,RealmList<ListingImage> images,String phone,User owner,String details){
+    public Listing(String title,RealmList<String> imagesPaths,String phone,User owner,String details){
+        this.imagesPaths=imagesPaths;
         this.title=title;
         this.phone=phone;
         this.owner=owner;
         this.details=details;
-        this.listingImages=images;
+
     }
 
 }

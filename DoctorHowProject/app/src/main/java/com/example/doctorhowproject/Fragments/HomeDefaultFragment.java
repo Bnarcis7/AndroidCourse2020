@@ -94,4 +94,5 @@ public class HomeDefaultFragment extends Fragment {
             }
         });
     }
+
 }

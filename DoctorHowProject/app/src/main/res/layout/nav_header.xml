@@ -25,6 +25,7 @@
         android:layout_height="wrap_content"
         android:paddingTop="8dp"
         android:text="email@test.com"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        />
 
 </LinearLayout>

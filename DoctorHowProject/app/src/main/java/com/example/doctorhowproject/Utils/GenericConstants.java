@@ -13,4 +13,5 @@ public class GenericConstants {
     public static final String USER_ADDED ="User added into database";
     public static final String LISTING_IMAGE_ADDED ="Listing image added into database";
 
+
 }

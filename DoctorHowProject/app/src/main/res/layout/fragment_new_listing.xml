@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@android:color/white"
+
     tools:context=".Fragments.NewListingFragment">
 
    <androidx.constraintlayout.widget.ConstraintLayout
@@ -54,6 +55,7 @@
            android:layout_margin="20dp"
            android:text="Pick images"
            android:background="@drawable/mybutton"
+
            app:layout_constraintTop_toBottomOf="@id/new_listing_details"
            app:layout_constraintLeft_toLeftOf="parent"
            app:layout_constraintRight_toRightOf="parent"/>

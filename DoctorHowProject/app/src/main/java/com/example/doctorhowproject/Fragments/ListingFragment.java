@@ -1,35 +1,27 @@
 package com.example.doctorhowproject.Fragments;
 
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.ImageSwitcher;
+
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.ViewSwitcher;
 
 import com.example.doctorhowproject.Models.Listing;
-import com.example.doctorhowproject.Models.ListingImage;
 import com.example.doctorhowproject.Models.User;
 import com.example.doctorhowproject.R;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
-
-import static com.example.doctorhowproject.Utils.Utils.arrayToImage;
 
 public class ListingFragment extends Fragment {
 
@@ -67,11 +59,6 @@ public class ListingFragment extends Fragment {
         Animation out=AnimationUtils.loadAnimation(getContext(),R.anim.out);
 
         imageView.setAnimation(in);
-
-
-        for(ListingImage i : mListing.getListingImages()){
-            images.add(arrayToImage(i.getImgArray()));
-        }
 
         final int[] i = {0};
         btnNext.setOnClickListener(new View.OnClickListener() {
