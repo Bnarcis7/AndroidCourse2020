@@ -35,6 +35,7 @@ public class RegisterFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mActivity = getActivity();
         realm = Realm.getDefaultInstance(); // GET AN INSTANCE FOR THIS THREAD ONLY!
+        realm.refresh();
         return inflater.inflate(R.layout.fragment_register, container, false);
     }
 
@@ -56,9 +57,9 @@ public class RegisterFragment extends Fragment {
             public void onClick(View view) {
                 if (validateFields()) {
                     User user = new User();
-                    user.setEmail(mEmail.getText().toString());
-                    user.setPassword(mPassword.getText().toString());
-                    user.setName(mName.getText().toString());
+                    user.setEmail(mEmail.getText().toString().trim());
+                    user.setPassword(mPassword.getText().toString().trim());
+                    user.setName(mName.getText().toString().trim());
                     addUser(user);
                     goToLogin();
                 }
@@ -133,5 +134,11 @@ public class RegisterFragment extends Fragment {
         mActivity.getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, fragment, "login_fragment")
                 .commit();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        realm.close();
     }
 }

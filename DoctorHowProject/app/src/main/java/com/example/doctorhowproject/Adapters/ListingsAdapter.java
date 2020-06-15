@@ -1,6 +1,6 @@
 package com.example.doctorhowproject.Adapters;
 
-import android.graphics.Bitmap;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,11 +11,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.doctorhowproject.Models.Listing;
 import com.example.doctorhowproject.R;
 import com.example.doctorhowproject.ViewHolders.ListingsViewHolder;
-import com.squareup.picasso.Picasso;
+
 
 import java.util.ArrayList;
 
-import static com.example.doctorhowproject.Utils.Utils.arrayToImage;
+
 
 public class ListingsAdapter extends RecyclerView.Adapter<ListingsViewHolder>{
 
@@ -43,8 +43,6 @@ public class ListingsAdapter extends RecyclerView.Adapter<ListingsViewHolder>{
     public void onBindViewHolder(@NonNull ListingsViewHolder holder, int position) {
         Listing currentListing=listings.get(position);
         holder.title.setText(currentListing.getTitle());
-        Bitmap bitmap =arrayToImage(currentListing.getListingImages().get(0).getImgArray());
-        holder.image.setImageBitmap(bitmap);
     }
 
     @Override
