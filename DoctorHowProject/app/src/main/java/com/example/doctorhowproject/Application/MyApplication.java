@@ -5,7 +5,7 @@ import android.app.Application;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
-//SET REALM CONFIGURATION WHEN APP STARTS AND ITS AVAILABLE FOR THE REST OF THE APP LIFETIME
+// Override for realm initialization
 public class MyApplication extends Application
 {
     @Override

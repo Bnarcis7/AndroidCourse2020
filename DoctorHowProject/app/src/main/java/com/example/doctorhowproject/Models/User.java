@@ -10,25 +10,28 @@ import io.realm.annotations.Required;
 public class User  extends RealmObject implements Serializable {
     @PrimaryKey
     private Integer id;
-
     @Required
     private String email;
-
     @Required
     private String password;
-
     @Required
     private String name;
-
-
     private UserType type;
 
-    public User(){} // default ctor
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
 
-    public User(String email,String password){
-        this.email=email;
-        this.password=password;
-        this.type=new UserType("user");
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+        return email.equals(user.email) &&
+                password.equals(user.password);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(email, password);
     }
 
     public Integer getId() {
@@ -71,19 +74,11 @@ public class User  extends RealmObject implements Serializable {
         this.type = type;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-
-        if (o == null || getClass() != o.getClass()) return false;
-
-        User user = (User) o;
-        return email.equals(user.email) &&
-                password.equals(user.password);
+    public User(String email,String password){
+        this.email=email;
+        this.password=password;
+        this.type=new UserType("user");
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(email, password);
-    }
+    public User(){}
 }

@@ -9,16 +9,7 @@ import io.realm.annotations.Required;
 public class UserType extends RealmObject implements Serializable {
     @PrimaryKey
     private Integer id;
-
     private String type;
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
 
     public Integer getId() {
         return id;
@@ -28,13 +19,19 @@ public class UserType extends RealmObject implements Serializable {
         this.id = id;
     }
 
-    public  UserType(){
+    public String getType() {
+        return type;
+    }
 
+    public void setType(String type) {
+        this.type = type;
     }
 
     public UserType(String type){
         this.type=type;
     }
 
+    public UserType(){
 
+    }
 }

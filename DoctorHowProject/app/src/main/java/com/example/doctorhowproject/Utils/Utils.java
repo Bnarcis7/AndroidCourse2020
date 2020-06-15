@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory;
 import java.io.ByteArrayOutputStream;
 
 public class Utils {
-
     public static byte[] imageToArray(Bitmap image){
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         image.compress(Bitmap.CompressFormat.JPEG, 70, stream);
@@ -16,5 +15,4 @@ public class Utils {
     public static Bitmap arrayToImage(byte[] array){
         return BitmapFactory.decodeByteArray(array, 0, array.length);
     }
-
 }

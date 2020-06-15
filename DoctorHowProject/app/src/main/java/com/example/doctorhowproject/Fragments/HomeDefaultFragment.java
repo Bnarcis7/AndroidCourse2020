@@ -24,75 +24,78 @@ import io.realm.Realm;
 import io.realm.RealmResults;
 
 public class HomeDefaultFragment extends Fragment {
+
     private HomePageActivity mActivity;
-    private Realm realm;
-    private ArrayList<Listing> listings;
-    private RecyclerView recyclerView;
+    private Realm mRealm;
+    private ArrayList<Listing> mListings;
+    private RecyclerView mRecyclerView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mActivity =(HomePageActivity) getActivity();
-        realm = Realm.getDefaultInstance(); // GET AN INSTANCE FOR THIS THREAD ONLY!
+        mActivity = (HomePageActivity) getActivity();
+        mRealm = Realm.getDefaultInstance();
         return inflater.inflate(R.layout.fragment_home_default, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        listings=new ArrayList<>();
+
+        // Get the listings from database and build the recycler view
+        mListings = new ArrayList<>();
         refreshListings();
         buildRecyclerView();
 
-        FloatingActionButton floatingBtn=mActivity.findViewById(R.id.floating_button);
+        FloatingActionButton floatingBtn = mActivity.findViewById(R.id.floating_button);
+
         floatingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NewListingFragment fragment=new NewListingFragment();
+                NewListingFragment fragment = new NewListingFragment();
                 mActivity.getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container,fragment,"new_listing_fragment")
+                        .replace(R.id.fragment_container, fragment, "new_listing_fragment")
                         .commit();
             }
         });
     }
 
-    private void buildRecyclerView(){
-        recyclerView = mActivity.findViewById(R.id.recycler_view_listings);
-        ListingsAdapter adapter=new ListingsAdapter(listings);
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mRealm.close();
+    }
+
+    private void buildRecyclerView() {
+        ListingsAdapter adapter = new ListingsAdapter(mListings);
         LinearLayoutManager layoutManager = new LinearLayoutManager(mActivity);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(layoutManager);
+
+        mRecyclerView = mActivity.findViewById(R.id.recycler_view_listings);
+        mRecyclerView.setAdapter(adapter);
+        mRecyclerView.setLayoutManager(layoutManager);
+
         adapter.setOnItemClickListener(new ListingsAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                Listing selectedListing = listings.get(position);
-                ListingFragment fragment=new ListingFragment(mActivity.user,selectedListing);
-                mActivity.getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container,fragment,"listing_fragment")
+                Listing selectedListing = mListings.get(position);
+                ListingFragment fragment = new ListingFragment(mActivity.getUser(), selectedListing);
+                mActivity.getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, fragment, "listing_fragment")
                         .commit();
             }
         });
     }
 
-    private void refreshListings(){
-        listings.clear();
-        listings.addAll(getAllListings());
+    private void refreshListings() {
+        mListings.clear();
+        mListings.addAll(getAllListings());
     }
 
     private ArrayList<Listing> getAllListings() {
-        RealmResults<Listing> query = realm.where(Listing.class)
-            .findAll();
+        RealmResults<Listing> query = mRealm.where(Listing.class)
+                .findAll();
 
         return new ArrayList<Listing>(query);
     }
-
-    private void remove(){
-        realm.executeTransactionAsync(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                realm.deleteAll();
-            }
-        });
-    }
-
 }
