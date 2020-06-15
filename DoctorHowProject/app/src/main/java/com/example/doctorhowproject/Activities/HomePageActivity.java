@@ -32,61 +32,50 @@ import io.realm.Realm;
 import io.realm.RealmResults;
 
 public class HomePageActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    private DrawerLayout drawer;
-    public  User user;
-    private Realm realm;
+    private DrawerLayout mDrawer;
+    private  User mUser;
+    private Realm mRealm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_home_page);
-        realm = Realm.getDefaultInstance();
+        mRealm = Realm.getDefaultInstance();
 
-        String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
-            requestPermissions(permissions, 1);
-
-        //GET THE USER ID I PASSED IN THE INTENT
         int id = (int) getIntent().getSerializableExtra("userId");
-        user = findUserById(id);
-
-        //OPEN LISTINGS FRAGMENT AS DEFAULT FRAGMENT ON HOME PAGE
+        mUser = findUserById(id);
+        mRealm.close();
+        // Open listings fragment as default fragment
         openListingsFragment();
 
-        //CHANGE THE TOOLBAR WITH A CUSTOM ONE
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //GET THE NAV VIEW AND SET ITS HEADER TEXT VIEWS
-        drawer = findViewById(R.id.activity_home_page);
+        mDrawer = findViewById(R.id.activity_home_page);
         NavigationView navView = findViewById(R.id.nav_view);
         navView.setNavigationItemSelectedListener(this);
         View headerView = navView.getHeaderView(0);
         TextView nav_email = headerView.findViewById(R.id.nav_txt_email);
         TextView nav_name = headerView.findViewById(R.id.nav_txt_name);
-        nav_email.setText(user.getEmail());
-        nav_name.setText(user.getName());
+        nav_email.setText(mUser.getEmail());
+        nav_name.setText(mUser.getName());
 
-        //IDK I SAW ON TUTORIAL, SOMETHING ABOUT BLIND PEOPLE
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
+        // Add action bar drawer to layout
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,
+                mDrawer,
+                toolbar,
+                R.string.navigation_drawer_open,
+                R.string.navigation_drawer_close);
+        mDrawer.addDrawerListener(toggle);
         toggle.syncState();
-    }
-
-
-    private void openListingsFragment() {
-        HomeDefaultFragment fragment = new HomeDefaultFragment();
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, fragment, "listings_fragment")
-                .commit();
     }
 
     @Override
     public void onBackPressed() {
-        //When back pressed, I want to close the navigation menu first
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+        // When back pressed, close the navigation menu first
+        if (mDrawer.isDrawerOpen(GravityCompat.START)) {
+            mDrawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
@@ -94,7 +83,7 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        //Navigation menu menu items clicks
+        // Navigation menu menu items clicks
         switch (menuItem.getItemId()) {
             case R.id.nav_profile: {
                 UserProfileFragment fragment = new UserProfileFragment();
@@ -120,15 +109,32 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
                 break;
             }
         }
-        drawer.closeDrawer(GravityCompat.START);
+
+        mDrawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
-    private User findUserById(int id) {
-        RealmResults<User> query = realm.where(User.class)
-                .equalTo("id", id)
-                .findAll();
+    private void openListingsFragment() {
+        HomeDefaultFragment fragment = new HomeDefaultFragment();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, fragment, "listings_fragment")
+                .commit();
+    }
 
-        return query.get(0);
+    private User findUserById(int id) {
+        User query = mRealm.where(User.class)
+                .equalTo("id", id)
+                .findFirst();
+
+        return mRealm.copyFromRealm(query);
+    }
+
+    public User getUser() {
+        return mUser;
+    }
+
+    public void setUser(User mUser) {
+        this.mUser = mUser;
     }
 }

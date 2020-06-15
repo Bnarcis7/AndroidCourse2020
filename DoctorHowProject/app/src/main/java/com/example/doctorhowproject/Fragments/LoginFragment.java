@@ -27,50 +27,47 @@ import io.realm.RealmResults;
 public class LoginFragment extends Fragment {
     private EditText mPasswordTxt;
     private EditText mEmailTxt;
-    private Realm realm;
+    private Realm mRealm;
     private FragmentActivity mActivity;
 
-    //INFLATE THE LAYOUT XML AND SAVE THE CURRENT ACTIVITY IN A VARIABLE
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mActivity = getActivity();
-        realm = Realm.getDefaultInstance();
-        realm.refresh();
+        mRealm = Realm.getDefaultInstance();
+        mRealm.refresh();
         return inflater.inflate(R.layout.fragment_login, container, false);
     }
 
-    // IN THIS METHOD PUT ON CLICK LISTENERS AND ALL OTHER STUFF
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //GET THE PASSWORD AND EMAIL TEXT VIEWS
         mPasswordTxt = (EditText) mActivity.findViewById(R.id.password_txt);
         mEmailTxt = (EditText) mActivity.findViewById(R.id.email_txt);
 
-        //GET THE BUTTON FOR LOGIN AND REGISTER
         Button loginBtn = mActivity.findViewById(R.id.login_btn);
         Button registerBtn = mActivity.findViewById(R.id.register_btn);
 
-        //CHECK FIELDS, IF LOGIN IS SUCCESSFULLY, GO TO HOME PAGE WITH THIS USER
+        // Check fields, if they are ok and user is found in the database, go to home page
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 User user=validateFields();
                 if(user!=null){
-                    //REPLACE THE USER WITH ONLY EMAIL AND PASSWORD WITH THE ONE FROM DB WITH ALL INFO
+                    // Replace the user with only email and password with the one with full info
+                    // from database
                     user=findUserByEmailPassword(user);
                     if(user!=null) {
                         goToHomePage(user);
                         return;
                     }
-                    Toast.makeText(getContext(), GenericConstants.USER_NOT_EXIST, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(),
+                            GenericConstants.USER_NOT_EXIST,
+                            Toast.LENGTH_LONG).show();
                 }
-
             }
         });
 
-        //OPEN REGISTER FRAGMENT
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,7 +79,7 @@ public class LoginFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        realm.close();//CLOSE THE INSTANCE WHEN THIS FRAGMENT IS DESTROYED
+        mRealm.close();
     }
 
     private User validateFields() {
@@ -90,51 +87,59 @@ public class LoginFragment extends Fragment {
         String password = mPasswordTxt.getText().toString().trim();
 
         if (email.length() == 0) {
-            Toast.makeText(this.getContext(), GenericConstants.NULL_FIELDS, Toast.LENGTH_LONG).show();
+            Toast.makeText(this.getContext(),
+                    GenericConstants.NULL_FIELDS,
+                    Toast.LENGTH_LONG)
+                    .show();
             return null;
         }
 
         if (password.length() == 0) {
-            Toast.makeText(this.getContext(), GenericConstants.NULL_FIELDS, Toast.LENGTH_LONG).show();
+            Toast.makeText(this.getContext(),
+                    GenericConstants.NULL_FIELDS,
+                    Toast.LENGTH_LONG)
+                    .show();
             return null;
         }
 
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            Toast.makeText(this.getContext(), GenericConstants.INCORRECT_EMAIL, Toast.LENGTH_LONG).show();
+            Toast.makeText(this.getContext(),
+                    GenericConstants.INCORRECT_EMAIL,
+                    Toast.LENGTH_LONG)
+                    .show();
             return null;
         }
-        //IF ALL CONDITIONS ARE FALSE (NOTHING IS WRONG WITH THE FIELDS)
-        //MAKE A NEW USER OBJECT AND RETURN IT
+
         return new User(email, password);
     }
 
     private User findUserByEmailPassword(final User user) {
-        //SEARCH FOR THIS USER IN DB
-        RealmResults<User> query = realm.where(User.class)
+        RealmResults<User> query = mRealm.where(User.class)
                 .equalTo("email", user.getEmail())
                 .equalTo("password", user.getPassword())
                 .findAll();
-        //IF THE QUERY IS EMPTY THAT MEANS THERE IS NO USER WITH THE SAME EMAIL/PASSWORD
+
         if (query.isLoaded()) {
             if(query.size() == 0){
                 return null;
             }
             return query.get(0);
         }
-        //SOMETHING WENT WRONG SO RETURN FALSE
+
         return null;
     }
 
     private void goToHomePage(User user) {
+        // Pass only user id to the next activity
         Intent intent = new Intent(mActivity, HomePageActivity.class);
-        //PASS USER ID TO THE NEXT ACTIVITY
         intent.putExtra("userId", user.getId());
         mActivity.startActivity(intent);
     }
 
     private void goToRegister(){
         RegisterFragment fragment = new RegisterFragment();
-        mActivity.getSupportFragmentManager().beginTransaction()
+        mActivity.getSupportFragmentManager()
+                .beginTransaction()
                 .replace(R.id.fragment_container,fragment,"register_fragment")
                 .commit();
     }

@@ -1,6 +1,5 @@
 package com.example.doctorhowproject.Fragments;
 
-
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -28,14 +27,14 @@ public class RegisterFragment extends Fragment {
     private TextView mEmail;
     private TextView mPassword;
     private TextView mName;
-    private Realm realm;
     private FragmentActivity mActivity;
+    private Realm mRealm;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mActivity = getActivity();
-        realm = Realm.getDefaultInstance(); // GET AN INSTANCE FOR THIS THREAD ONLY!
-        realm.refresh();
+        mRealm = Realm.getDefaultInstance();
+        mRealm.refresh();
         return inflater.inflate(R.layout.fragment_register, container, false);
     }
 
@@ -72,9 +71,13 @@ public class RegisterFragment extends Fragment {
                 goToLogin();
             }
         });
-
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mRealm.close();
+    }
 
     private boolean validateFields() {
         String email = mEmail.getText().toString().trim();
@@ -82,44 +85,54 @@ public class RegisterFragment extends Fragment {
         String name = mName.getText().toString().trim();
 
         if (email.length() == 0) {
-            Toast.makeText(this.getContext(), GenericConstants.NULL_FIELDS, Toast.LENGTH_LONG).show();
+            Toast.makeText(this.getContext(),
+                    GenericConstants.NULL_FIELDS,
+                    Toast.LENGTH_LONG)
+                    .show();
             return false;
         }
 
         if (password.length() == 0) {
-            Toast.makeText(this.getContext(), GenericConstants.NULL_FIELDS, Toast.LENGTH_LONG).show();
+            Toast.makeText(this.getContext(),
+                    GenericConstants.NULL_FIELDS,
+                    Toast.LENGTH_LONG)
+                    .show();
             return false;
         }
 
         if (name.length() == 0) {
-            Toast.makeText(this.getContext(), GenericConstants.NULL_FIELDS, Toast.LENGTH_LONG).show();
+            Toast.makeText(this.getContext(),
+                    GenericConstants.NULL_FIELDS,
+                    Toast.LENGTH_LONG)
+                    .show();
             return false;
         }
 
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            Toast.makeText(this.getContext(), GenericConstants.INCORRECT_EMAIL, Toast.LENGTH_LONG).show();
+            Toast.makeText(this.getContext(),
+                    GenericConstants.INCORRECT_EMAIL,
+                    Toast.LENGTH_LONG)
+                    .show();
             return false;
         }
 
-        Toast.makeText(this.getContext(), GenericConstants.SUCCESS, Toast.LENGTH_LONG).show();
         return true;
     }
 
     private void addUser(final User user) {
-        realm.executeTransactionAsync(new Realm.Transaction() {
+        // Search for max id in the table, if there is none, set the id to 1
+        mRealm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                //FIND MAX ID IN USER TABLE
                 Number currentIdNum = realm.where(User.class).max("id");
                 int nextId;
 
-                //IF THERE IS NONE IN THE DATABASE THE ID IS 1, ELSE ITS THE NEXT NUMBER
                 if (currentIdNum == null) {
                     nextId = 1;
                 } else {
                     nextId = currentIdNum.intValue() + 1;
                 }
-                //SET USERS ID AND INSERT IT INTO DB
+
                 user.setId(nextId);
                 realm.insertOrUpdate(user);
             }
@@ -128,17 +141,11 @@ public class RegisterFragment extends Fragment {
         Toast.makeText(this.getContext(), GenericConstants.USER_ADDED, Toast.LENGTH_LONG).show();
     }
 
-
     private void goToLogin() {
         LoginFragment fragment = new LoginFragment();
-        mActivity.getSupportFragmentManager().beginTransaction()
+        mActivity.getSupportFragmentManager()
+                .beginTransaction()
                 .replace(R.id.fragment_container, fragment, "login_fragment")
                 .commit();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        realm.close();
     }
 }

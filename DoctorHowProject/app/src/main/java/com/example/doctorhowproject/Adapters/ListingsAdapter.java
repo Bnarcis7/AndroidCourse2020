@@ -1,6 +1,8 @@
 package com.example.doctorhowproject.Adapters;
 
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +45,8 @@ public class ListingsAdapter extends RecyclerView.Adapter<ListingsViewHolder>{
     public void onBindViewHolder(@NonNull ListingsViewHolder holder, int position) {
         Listing currentListing=listings.get(position);
         holder.title.setText(currentListing.getTitle());
+        Bitmap bmImg = BitmapFactory.decodeFile(currentListing.getImagesPaths().get(0));
+        holder.image.setImageBitmap(bmImg);
     }
 
     @Override
