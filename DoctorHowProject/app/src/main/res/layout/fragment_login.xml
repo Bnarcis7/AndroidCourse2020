@@ -2,8 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/login_fragment"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".Fragments.LoginFragment"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorAccent"
@@ -33,6 +31,7 @@
         android:layout_height="wrap_content"
         android:text="LogIn"
         android:textColor="@android:color/black"
+        android:background="@drawable/my_button"
         android:layout_gravity="center"
         android:layout_marginTop="30dp"/>
 
@@ -41,7 +40,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Register"
+        android:background="@drawable/my_button"
         android:textColor="@android:color/black"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:layout_marginTop="3dp"
+        />
 
 </LinearLayout>

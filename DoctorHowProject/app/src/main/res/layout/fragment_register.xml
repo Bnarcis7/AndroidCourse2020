@@ -39,12 +39,16 @@
         android:layout_height="wrap_content"
         android:text="Register"
         android:layout_gravity="center"
+        android:background="@drawable/my_button"
         android:layout_marginTop="30dp"/>
     <Button
         android:id="@+id/register_back_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/my_button"
         android:text="Back"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:layout_marginTop="3dp"
+        />
 
 </LinearLayout>
