@@ -12,7 +12,6 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -37,7 +36,6 @@ import com.example.doctorhowproject.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -53,7 +51,6 @@ import io.realm.Realm;
 
 
 public class NewListingFragment extends Fragment {
-
     private EditText mTitle;
     private EditText mPhone;
     private EditText mDetails;
@@ -123,7 +120,6 @@ public class NewListingFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
-
             if (requestCode == 1) {
                 if (data != null) {
                     Uri uri = data.getData();
@@ -172,7 +168,6 @@ public class NewListingFragment extends Fragment {
                     .show();
             return false;
         }
-
         return true;
     }
 
@@ -181,7 +176,6 @@ public class NewListingFragment extends Fragment {
         photoPickerIntent.setType("image/*");
         startActivityForResult(photoPickerIntent, 1);
     }
-
 
     private void setListingId() {
         mRealm.executeTransactionAsync(new Realm.Transaction() {
@@ -197,7 +191,6 @@ public class NewListingFragment extends Fragment {
                 } else {
                     nextId = currentIdNum.intValue() + 1;
                 }
-
                 mNewListing.setId(nextId);
             }
         });
