@@ -8,11 +8,15 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -29,6 +33,7 @@ public class LoginFragment extends Fragment {
     private EditText mEmailTxt;
     private Realm mRealm;
     private FragmentActivity mActivity;
+    private CheckBox mShowPassword;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -43,15 +48,33 @@ public class LoginFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         mPasswordTxt = (EditText) mActivity.findViewById(R.id.password_txt);
+        mShowPassword= mActivity.findViewById(R.id.show_ckb);
         mEmailTxt = (EditText) mActivity.findViewById(R.id.email_txt);
 
         Button loginBtn = mActivity.findViewById(R.id.login_btn);
         Button registerBtn = mActivity.findViewById(R.id.register_btn);
 
+        //CODE FOR SHOWPASSWORD CHECKBOX
+        /*mShowPassword.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    mPasswordTxt.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                }
+                else
+                {
+                    mPasswordTxt.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                }
+            }
+        });*/
+
+
         // Check fields, if they are ok and user is found in the database, go to home page
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
                 User user=validateFields();
                 if(user!=null){
                     // Replace the user with only email and password with the one with full info
@@ -67,6 +90,7 @@ public class LoginFragment extends Fragment {
                 }
             }
         });
+
 
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,6 +155,8 @@ public class LoginFragment extends Fragment {
 
     private void goToHomePage(User user) {
         // Pass only user id to the next activity
+
+
         Intent intent = new Intent(mActivity, HomePageActivity.class);
         intent.putExtra("userId", user.getId());
         mActivity.startActivity(intent);
