@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/fragment_register"
-    android:background="@android:color/holo_blue_light"
+    android:background="@android:color/white"
+
     android:padding="20dp">
 
     <EditText

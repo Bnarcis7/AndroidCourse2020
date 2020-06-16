@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@android:color/holo_purple"
+    android:background="@android:color/white"
+
     android:id="@+id/fragment_listings"
     tools:context=".Fragments.HomeDefaultFragment">
 
@@ -23,6 +24,7 @@
         android:layout_gravity="end|bottom"
         android:src="@drawable/ic_new_listing"
         android:contentDescription="Submit"
+        android:background="@android:color/black"
         android:layout_margin="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
