@@ -10,8 +10,6 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
-import java.util.ArrayList;
-
 import io.realm.RealmList;
 
 
@@ -34,7 +32,7 @@ public class ImageAdapter extends PagerAdapter {
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
         Bitmap bmImg = BitmapFactory.decodeFile(mImages.get(position));
         ImageView imageView = new ImageView(mContext);
-        imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        imageView.setScaleType(ImageView.ScaleType.FIT_XY);
         imageView.setImageBitmap(bmImg);
         container.addView(imageView, 0);
         return imageView;

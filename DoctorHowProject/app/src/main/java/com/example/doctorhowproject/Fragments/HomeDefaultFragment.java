@@ -4,6 +4,9 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,10 +17,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.example.doctorhowproject.Activities.HomePageActivity;
 import com.example.doctorhowproject.Adapters.ListingsAdapter;
@@ -52,7 +51,7 @@ public class HomeDefaultFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         // Check for storage permission
-        if(!checkReadPermission()){
+        if (!checkReadPermission()) {
             requestReadPermission();
         }
 
@@ -62,7 +61,7 @@ public class HomeDefaultFragment extends Fragment {
         buildRecyclerView();
 
         FloatingActionButton floatingBtn = mActivity.findViewById(R.id.floating_button);
-        final SwipeRefreshLayout swipeRefreshLayout=mActivity.findViewById(R.id.home_refresh_layout);
+        final SwipeRefreshLayout swipeRefreshLayout = mActivity.findViewById(R.id.home_refresh_layout);
 
         floatingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,6 +69,7 @@ public class HomeDefaultFragment extends Fragment {
                 NewListingFragment fragment = new NewListingFragment();
                 mActivity.getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, fragment, "new_listing_fragment")
+                        .addToBackStack(fragment.toString())
                         .commit();
             }
         });
@@ -90,15 +90,12 @@ public class HomeDefaultFragment extends Fragment {
         mRealm.close();
     }
 
-    private boolean checkReadPermission(){
-        if (ContextCompat.checkSelfPermission(mActivity,
-                Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                return true;
-        }
-        return false;
+    private boolean checkReadPermission() {
+        return ContextCompat.checkSelfPermission(mActivity,
+                Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
     }
 
-    private void requestReadPermission(){
+    private void requestReadPermission() {
         // Code for permission check and show dialog in case there is none
         if (ActivityCompat.shouldShowRequestPermissionRationale(mActivity,
                 Manifest.permission.READ_EXTERNAL_STORAGE)) {
@@ -128,7 +125,6 @@ public class HomeDefaultFragment extends Fragment {
         }
     }
 
-
     private void buildRecyclerView() {
         ListingsAdapter adapter = new ListingsAdapter(mListings);
         LinearLayoutManager layoutManager = new LinearLayoutManager(mActivity);
@@ -144,7 +140,9 @@ public class HomeDefaultFragment extends Fragment {
                 ListingFragment fragment = new ListingFragment(selectedListing);
                 mActivity.getSupportFragmentManager()
                         .beginTransaction()
+                        .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_right)
                         .replace(R.id.fragment_container, fragment, "listing_fragment")
+                        .addToBackStack(fragment.toString())
                         .commit();
             }
         });

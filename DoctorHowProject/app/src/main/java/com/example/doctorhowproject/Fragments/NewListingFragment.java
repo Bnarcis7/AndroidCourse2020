@@ -2,21 +2,12 @@ package com.example.doctorhowproject.Fragments;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Patterns;
@@ -27,22 +18,22 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+
 import com.example.doctorhowproject.Activities.HomePageActivity;
-import com.example.doctorhowproject.Application.MyApplication;
-import com.example.doctorhowproject.Models.User;
-import com.example.doctorhowproject.Utils.GenericConstants;
 import com.example.doctorhowproject.Models.Listing;
 import com.example.doctorhowproject.R;
+import com.example.doctorhowproject.Utils.GenericConstants;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
-import java.nio.channels.FileChannel;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -138,7 +129,7 @@ public class NewListingFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if(!checkWritePermission()){
+        if (!checkWritePermission()) {
             requestWritePermission();
         }
     }
@@ -244,7 +235,7 @@ public class NewListingFragment extends Fragment {
         });
     }
 
-    private void makeFolder(){
+    private void makeFolder() {
         if (!mDestinationFolder.exists()) {
             if (!mDestinationFolder.mkdirs()) {
                 Toast.makeText(getContext(),
@@ -255,20 +246,17 @@ public class NewListingFragment extends Fragment {
         }
     }
 
-    private void goToHome(){
-        HomeDefaultFragment fragment=new HomeDefaultFragment();
+    private void goToHome() {
+        HomeDefaultFragment fragment = new HomeDefaultFragment();
         mActivity.getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragment_container,fragment)
+                .replace(R.id.fragment_container, fragment)
                 .commit();
     }
 
-    private boolean checkWritePermission(){
-        if (ContextCompat.checkSelfPermission(mActivity,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        }
-        return false;
+    private boolean checkWritePermission() {
+        return ContextCompat.checkSelfPermission(mActivity,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
     }
 
     private void requestWritePermission() {

@@ -1,16 +1,11 @@
 package com.example.doctorhowproject.ViewHolders;
 
 import android.view.View;
-import android.widget.ImageSwitcher;
 import android.widget.ImageView;
-
 import android.widget.TextView;
 
-
 import androidx.annotation.NonNull;
-
 import androidx.recyclerview.widget.RecyclerView;
-
 
 import com.example.doctorhowproject.Adapters.ListingsAdapter;
 import com.example.doctorhowproject.R;
@@ -26,9 +21,9 @@ public class ListingsViewHolder extends RecyclerView.ViewHolder {
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (listener != null){
+                if (listener != null) {
                     int position = getAdapterPosition();
-                    if(position != RecyclerView.NO_POSITION){
+                    if (position != RecyclerView.NO_POSITION) {
                         listener.onItemClick(position);
                     }
                 }

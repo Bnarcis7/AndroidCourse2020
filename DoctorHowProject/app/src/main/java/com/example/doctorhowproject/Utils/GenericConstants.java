@@ -11,9 +11,11 @@ public class GenericConstants {
     public static final String USER_NOT_EXIST = "User not found";
     public static final String SUCCESS = "Success";
     public static final String READ_USER_FAILED = "Unable to fetch userDetails";
-    public static final String USER_ADDED ="You can log in now :)";
-    public static final String LISTING_IMAGE_ADDED ="Listing image added into database";
+    public static final String USER_ADDED = "You can log in now :)";
+    public static final String USER_UPDATED = "User updated";
+    public static final String LISTING_IMAGE_ADDED = "Listing image added into database";
     public static final Integer READ_STORAGE_PERMISSION_CODE = 1;
     public static final Integer WRITE_STORAGE_PERMISSION_CODE = 2;
     public static final Integer PICK_IMAGE_REQUEST_CODE = 3;
+    public static final Integer CALL_PHONE_REQUEST_CODE = 3;
 }

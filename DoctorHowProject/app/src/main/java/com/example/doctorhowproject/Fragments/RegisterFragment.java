@@ -1,32 +1,31 @@
 package com.example.doctorhowproject.Fragments;
 
 import android.os.Bundle;
+import android.util.Patterns;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
-import android.util.Patterns;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.example.doctorhowproject.Utils.GenericConstants;
 import com.example.doctorhowproject.Models.User;
 import com.example.doctorhowproject.R;
-
+import com.example.doctorhowproject.Utils.GenericConstants;
 
 import io.realm.Realm;
 
 public class RegisterFragment extends Fragment {
-    private TextView mEmail;
-    private TextView mPassword;
-    private TextView mName;
+    private EditText mFirstName;
+    private EditText mLastName;
+    private EditText mEmail;
+    private EditText mPhone;
+    private EditText mPassword;
     private FragmentActivity mActivity;
     private Realm mRealm;
 
@@ -43,9 +42,11 @@ public class RegisterFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         //GET TEXT VIEWS
+        mFirstName = mActivity.findViewById(R.id.register_first_txt);
+        mLastName = mActivity.findViewById(R.id.register_last_txt);
         mEmail = mActivity.findViewById(R.id.register_email_txt);
+        mPhone = mActivity.findViewById(R.id.register_phone);
         mPassword = mActivity.findViewById(R.id.register_password_txt);
-        mName = mActivity.findViewById(R.id.register_name_txt);
 
         //GET BUTTONS
         Button registerBtn = mActivity.findViewById(R.id.register_btn);
@@ -58,7 +59,9 @@ public class RegisterFragment extends Fragment {
                     User user = new User();
                     user.setEmail(mEmail.getText().toString().trim());
                     user.setPassword(mPassword.getText().toString().trim());
-                    user.setName(mName.getText().toString().trim());
+                    user.setFirstName(mFirstName.getText().toString().trim());
+                    user.setLastName(mLastName.getText().toString().trim());
+                    user.setPhone(mPhone.getText().toString().trim());
                     addUser(user);
                     goToLogin();
                 }
@@ -82,7 +85,9 @@ public class RegisterFragment extends Fragment {
     private boolean validateFields() {
         String email = mEmail.getText().toString().trim();
         String password = mPassword.getText().toString().trim();
-        String name = mName.getText().toString().trim();
+        String firstName = mFirstName.getText().toString().trim();
+        String lastName = mLastName.getText().toString().trim();
+        String phone = mPhone.getText().toString().trim();
 
         if (email.length() == 0) {
             Toast.makeText(this.getContext(),
@@ -100,7 +105,23 @@ public class RegisterFragment extends Fragment {
             return false;
         }
 
-        if (name.length() == 0) {
+        if (firstName.length() == 0) {
+            Toast.makeText(this.getContext(),
+                    GenericConstants.NULL_FIELDS,
+                    Toast.LENGTH_LONG)
+                    .show();
+            return false;
+        }
+
+        if (lastName.length() == 0) {
+            Toast.makeText(this.getContext(),
+                    GenericConstants.NULL_FIELDS,
+                    Toast.LENGTH_LONG)
+                    .show();
+            return false;
+        }
+
+        if (phone.length() == 0) {
             Toast.makeText(this.getContext(),
                     GenericConstants.NULL_FIELDS,
                     Toast.LENGTH_LONG)
@@ -111,6 +132,14 @@ public class RegisterFragment extends Fragment {
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             Toast.makeText(this.getContext(),
                     GenericConstants.INCORRECT_EMAIL,
+                    Toast.LENGTH_LONG)
+                    .show();
+            return false;
+        }
+
+        if (!Patterns.PHONE.matcher(phone).matches()) {
+            Toast.makeText(this.getContext(),
+                    GenericConstants.INCORRECT_PHONE,
                     Toast.LENGTH_LONG)
                     .show();
             return false;

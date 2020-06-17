@@ -1,8 +1,5 @@
 package com.example.doctorhowproject.Models;
 
-import java.util.ArrayList;
-
-import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -15,6 +12,24 @@ public class Listing extends RealmObject {
     private String phone;
     private String title;
     private RealmList<String> imagesPaths;
+
+    public Listing() {
+        imagesPaths = new RealmList<>();
+    }
+
+    public Listing(String title, RealmList<String> imagesPaths) {
+        this.imagesPaths = imagesPaths;
+        this.title = title;
+
+    }
+
+    public Listing(String title, RealmList<String> imagesPaths, String phone, User owner, String details) {
+        this.imagesPaths = imagesPaths;
+        this.title = title;
+        this.phone = phone;
+        this.owner = owner;
+        this.details = details;
+    }
 
     public Integer getId() {
         return id;
@@ -62,23 +77,5 @@ public class Listing extends RealmObject {
 
     public void setImagesPaths(RealmList<String> imagesPaths) {
         this.imagesPaths = imagesPaths;
-    }
-
-    public Listing(){
-        imagesPaths=new RealmList<>();
-    }
-
-    public Listing(String title,RealmList<String> imagesPaths){
-        this.imagesPaths=imagesPaths;
-        this.title=title;
-
-    }
-
-    public Listing(String title,RealmList<String> imagesPaths,String phone,User owner,String details){
-        this.imagesPaths=imagesPaths;
-        this.title=title;
-        this.phone=phone;
-        this.owner=owner;
-        this.details=details;
     }
 }
