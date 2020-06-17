@@ -27,7 +27,14 @@
         android:textColor="@android:color/black"
         android:hint="Password"
         android:paddingLeft="20dp"
+        android:inputType="textPassword"
         android:layout_marginTop="10dp"/>
+
+    <CheckBox
+        android:id="@+id/show_ckb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Show Password" />
 
     <Button
         android:id="@+id/login_btn"
