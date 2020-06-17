@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:src="@drawable/ic_new_listing"
-        android:contentDescription="Submit"
+        android:contentDescription="Add new listing"
         android:background="@android:color/black"
         android:layout_margin="16dp"
         app:layout_constraintBottom_toBottomOf="parent"

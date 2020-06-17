@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/login_fragment"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,6 +7,7 @@
     android:background="@android:color/white"
     android:orientation="vertical"
     android:padding="20dp"
+    android:layout_margin="30dp"
     tools:context=".Fragments.LoginFragment">
 
 
@@ -16,24 +16,26 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@android:color/black"
+        android:layout_marginTop="40dp"
         android:hint="Email"
-        android:paddingLeft="20dp"
-        android:layout_marginTop="40dp"/>
+        android:layout_marginBottom="20dp"
+        android:backgroundTint="#2677DA" />
 
     <EditText
         android:id="@+id/password_txt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@android:color/black"
+        android:layout_marginTop="10dp"
         android:hint="Password"
-        android:paddingLeft="20dp"
         android:inputType="textPassword"
-        android:layout_marginTop="10dp"/>
+        android:backgroundTint="#2677DA" />
 
     <CheckBox
         android:id="@+id/show_ckb"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
         android:text="Show Password" />
 
     <Button
@@ -41,26 +43,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="LogIn"
-        android:textColor="@android:color/black"
-        android:background="@drawable/my_button"
+        android:background="@drawable/custom_button"
+        android:elevation="4dp"
         android:layout_gravity="center"
-        android:layout_marginTop="30dp"/>
+        android:textColor="@android:color/white" />
 
     <Button
         android:id="@+id/register_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Register"
-        android:background="@drawable/my_button"
-        android:textColor="@android:color/black"
+        android:layout_marginTop="20dp"
         android:layout_gravity="center"
-        android:layout_marginTop="3dp"
-        />
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="393dp"
-        tools:src="@drawable/doctor" />
-
+        android:background="@drawable/custom_button"
+        android:elevation="4dp"
+        android:textColor="@android:color/white" />
 </LinearLayout>
