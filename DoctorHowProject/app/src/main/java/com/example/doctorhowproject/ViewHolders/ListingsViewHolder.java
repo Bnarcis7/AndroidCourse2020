@@ -1,6 +1,7 @@
 package com.example.doctorhowproject.ViewHolders;
 
 import android.view.View;
+import android.widget.ImageSwitcher;
 import android.widget.ImageView;
 
 import android.widget.TextView;

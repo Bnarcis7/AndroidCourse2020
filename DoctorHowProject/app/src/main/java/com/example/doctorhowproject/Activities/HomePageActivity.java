@@ -38,9 +38,8 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-       
         super.onCreate(savedInstanceState);
-       
+
         setContentView(R.layout.activity_home_page);
         mRealm = Realm.getDefaultInstance();
 

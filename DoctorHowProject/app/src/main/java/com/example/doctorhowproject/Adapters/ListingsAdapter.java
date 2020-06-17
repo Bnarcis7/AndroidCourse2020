@@ -45,8 +45,10 @@ public class ListingsAdapter extends RecyclerView.Adapter<ListingsViewHolder>{
     public void onBindViewHolder(@NonNull ListingsViewHolder holder, int position) {
         Listing currentListing=listings.get(position);
         holder.title.setText(currentListing.getTitle());
-        Bitmap bmImg = BitmapFactory.decodeFile(currentListing.getImagesPaths().get(0));
-        holder.image.setImageBitmap(bmImg);
+        if(currentListing.getImagesPaths().size()!=0) {
+            Bitmap bmImg = BitmapFactory.decodeFile(currentListing.getImagesPaths().get(0));
+            holder.image.setImageBitmap(bmImg);
+        }
     }
 
     @Override
