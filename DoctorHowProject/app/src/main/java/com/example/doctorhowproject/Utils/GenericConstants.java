@@ -15,5 +15,5 @@ public class GenericConstants {
     public static final String LISTING_IMAGE_ADDED ="Listing image added into database";
     public static final Integer READ_STORAGE_PERMISSION_CODE = 1;
     public static final Integer WRITE_STORAGE_PERMISSION_CODE = 2;
-
+    public static final Integer PICK_IMAGE_REQUEST_CODE = 3;
 }

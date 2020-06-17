@@ -47,15 +47,15 @@ public class LoginFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mPasswordTxt = (EditText) mActivity.findViewById(R.id.password_txt);
+        mPasswordTxt = mActivity.findViewById(R.id.password_txt);
         mShowPassword= mActivity.findViewById(R.id.show_ckb);
-        mEmailTxt = (EditText) mActivity.findViewById(R.id.email_txt);
+        mEmailTxt = mActivity.findViewById(R.id.email_txt);
 
         Button loginBtn = mActivity.findViewById(R.id.login_btn);
         Button registerBtn = mActivity.findViewById(R.id.register_btn);
 
         //CODE FOR SHOWPASSWORD CHECKBOX
-        /*mShowPassword.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        mShowPassword.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
@@ -66,7 +66,7 @@ public class LoginFragment extends Fragment {
                     mPasswordTxt.setTransformationMethod(PasswordTransformationMethod.getInstance());
                 }
             }
-        });*/
+        });
 
 
         // Check fields, if they are ok and user is found in the database, go to home page
@@ -155,7 +155,6 @@ public class LoginFragment extends Fragment {
 
     private void goToHomePage(User user) {
         // Pass only user id to the next activity
-
 
         Intent intent = new Intent(mActivity, HomePageActivity.class);
         intent.putExtra("userId", user.getId());
