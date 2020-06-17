@@ -1,46 +1,38 @@
 package com.example.doctorhowproject.Activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.Manifest;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-
-import com.example.doctorhowproject.Fragments.HomeDefaultFragment;
-import com.example.doctorhowproject.Models.User;
-import com.example.doctorhowproject.R;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
-
 import com.example.doctorhowproject.Fragments.FavoritesFragment;
+import com.example.doctorhowproject.Fragments.HomeDefaultFragment;
 import com.example.doctorhowproject.Fragments.UserProfileFragment;
+import com.example.doctorhowproject.Models.User;
+import com.example.doctorhowproject.R;
 import com.google.android.material.navigation.NavigationView;
 
-
-
 import io.realm.Realm;
-import io.realm.RealmResults;
 
 public class HomePageActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout mDrawer;
-    private  User mUser;
+    private User mUser;
     private Realm mRealm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-       
         super.onCreate(savedInstanceState);
-       
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_home_page);
         mRealm = Realm.getDefaultInstance();
 
@@ -52,6 +44,7 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         mDrawer = findViewById(R.id.activity_home_page);
         NavigationView navView = findViewById(R.id.nav_view);
@@ -60,7 +53,7 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
         TextView nav_email = headerView.findViewById(R.id.nav_txt_email);
         TextView nav_name = headerView.findViewById(R.id.nav_txt_name);
         nav_email.setText(mUser.getEmail());
-        nav_name.setText(mUser.getName());
+        nav_name.setText(mUser.getFirstName());
 
         // Add action bar drawer to layout
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,

@@ -3,7 +3,7 @@
     android:layout_height="176dp"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_gravity="top"
-    android:background="@color/colorAccent"
+    android:background="#2677DA"
     android:orientation="vertical"
     android:padding="16dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark"

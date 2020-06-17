@@ -8,6 +8,10 @@
 
     android:id="@+id/fragment_listings"
     tools:context=".Fragments.HomeDefaultFragment">
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/home_refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -23,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:src="@drawable/ic_new_listing"
-        android:contentDescription="Submit"
+        android:contentDescription="Add new listing"
         android:background="@android:color/black"
         android:layout_margin="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -31,6 +35,6 @@
 
         />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </RelativeLayout>

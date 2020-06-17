@@ -2,21 +2,12 @@ package com.example.doctorhowproject.Fragments;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Patterns;
@@ -27,22 +18,22 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+
 import com.example.doctorhowproject.Activities.HomePageActivity;
-import com.example.doctorhowproject.Application.MyApplication;
-import com.example.doctorhowproject.Models.User;
-import com.example.doctorhowproject.Utils.GenericConstants;
 import com.example.doctorhowproject.Models.Listing;
 import com.example.doctorhowproject.R;
+import com.example.doctorhowproject.Utils.GenericConstants;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
-import java.nio.channels.FileChannel;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -84,6 +75,7 @@ public class NewListingFragment extends Fragment {
 
         mDestinationFolder = new File(Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES), "DoctorHowImagesFolder");
+        makeFolder();
 
         Button imagePickBtn = mActivity.findViewById(R.id.new_listing_images_btn);
         FloatingActionButton finishBtn = mActivity.findViewById(R.id.floating_button_finish);
@@ -120,7 +112,7 @@ public class NewListingFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == 1) {
+            if (requestCode == GenericConstants.PICK_IMAGE_REQUEST_CODE) {
                 if (data != null) {
                     Uri uri = data.getData();
                     try {
@@ -131,6 +123,14 @@ public class NewListingFragment extends Fragment {
                     }
                 }
             }
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!checkWritePermission()) {
+            requestWritePermission();
         }
     }
 
@@ -174,7 +174,7 @@ public class NewListingFragment extends Fragment {
     private void pickFromGallery() {
         Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
         photoPickerIntent.setType("image/*");
-        startActivityForResult(photoPickerIntent, 1);
+        startActivityForResult(photoPickerIntent, GenericConstants.PICK_IMAGE_REQUEST_CODE);
     }
 
     private void setListingId() {
@@ -197,24 +197,8 @@ public class NewListingFragment extends Fragment {
     }
 
     private void saveImage(Bitmap image) {
-        // Check if there is write permission and create destination folder
-        if (ContextCompat.checkSelfPermission(mActivity,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-            if (!mDestinationFolder.exists()) {
-                if (!mDestinationFolder.mkdirs()) {
-                    Toast.makeText(getContext(),
-                            "Failed to mkdir " + mDestinationFolder.getPath(),
-                            Toast.LENGTH_SHORT)
-                            .show();
-                    return;
-                }
-            }
-        } else {
-            requestStoragePermission();
-        }
-
         // Create a media file in which will copy the selected image by user
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmssSSS").format(new Date());
         File mediaFile;
         mediaFile = new File(mDestinationFolder.getPath() + File.separator +
                 "IMG_" + timeStamp + ".jpg");
@@ -251,15 +235,31 @@ public class NewListingFragment extends Fragment {
         });
     }
 
-    private void goToHome(){
-        HomeDefaultFragment fragment=new HomeDefaultFragment();
+    private void makeFolder() {
+        if (!mDestinationFolder.exists()) {
+            if (!mDestinationFolder.mkdirs()) {
+                Toast.makeText(getContext(),
+                        "Failed to mkdir " + mDestinationFolder.getPath(),
+                        Toast.LENGTH_SHORT)
+                        .show();
+            }
+        }
+    }
+
+    private void goToHome() {
+        HomeDefaultFragment fragment = new HomeDefaultFragment();
         mActivity.getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragment_container,fragment)
+                .replace(R.id.fragment_container, fragment)
                 .commit();
     }
 
-    private void requestStoragePermission() {
+    private boolean checkWritePermission() {
+        return ContextCompat.checkSelfPermission(mActivity,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void requestWritePermission() {
         // Code for permission check and show dialog in case there is none
         if (ActivityCompat.shouldShowRequestPermissionRationale(mActivity,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
@@ -285,7 +285,7 @@ public class NewListingFragment extends Fragment {
         } else {
             ActivityCompat.requestPermissions(mActivity,
                     new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                    1);
+                    GenericConstants.WRITE_STORAGE_PERMISSION_CODE);
         }
     }
 }

@@ -1,35 +1,33 @@
 package com.example.doctorhowproject.Fragments;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.viewpager.widget.ViewPager;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
-
+import com.example.doctorhowproject.Adapters.ImageAdapter;
 import com.example.doctorhowproject.Models.Listing;
-import com.example.doctorhowproject.Models.User;
 import com.example.doctorhowproject.R;
-
-import java.util.ArrayList;
 
 public class ListingFragment extends Fragment {
 
-    private User mUser;
     private Listing mListing;
     private FragmentActivity mActivity;
 
-    public ListingFragment(User user, Listing listing) {
-        this.mUser = user;
+    public ListingFragment() {
+    }
+
+    public ListingFragment(Listing listing) {
         this.mListing = listing;
     }
 
@@ -44,12 +42,36 @@ public class ListingFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Button btnNext = mActivity.findViewById(R.id.btn_img_next);
         TextView title = mActivity.findViewById(R.id.listing_title);
-        ImageView imageView = mActivity.findViewById(R.id.listing_images);
+        final TextView phone = mActivity.findViewById(R.id.listing_phone);
+        TextView description = mActivity.findViewById(R.id.listing_description);
+
+        ViewPager viewPager = mActivity.findViewById(R.id.listing_images);
+        Button callBtn = mActivity.findViewById(R.id.listing_call_button);
+
+        ImageAdapter imageAdapter = new ImageAdapter(getContext(), mListing.getImagesPaths());
+        viewPager.setAdapter(imageAdapter);
 
         title.setText(mListing.getTitle());
-        Bitmap bmImg = BitmapFactory.decodeFile(mListing.getImagesPaths().get(0));
-        imageView.setImageBitmap(bmImg);
+        phone.setText(mListing.getPhone());
+        description.setText(mListing.getDetails());
+
+        phone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                callIntent.setData(Uri.parse("tel:+" + phone.getText().toString().trim()));
+                startActivity(callIntent);
+            }
+        });
+
+        callBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                callIntent.setData(Uri.parse("tel:+" + phone.getText().toString().trim()));
+                startActivity(callIntent);
+            }
+        });
     }
 }
