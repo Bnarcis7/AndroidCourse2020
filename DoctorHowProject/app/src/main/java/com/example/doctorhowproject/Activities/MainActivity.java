@@ -1,11 +1,7 @@
 package com.example.doctorhowproject.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-
 import android.os.Bundle;
-
-
 import com.example.doctorhowproject.Fragments.LoginFragment;
 import com.example.doctorhowproject.R;
 
