@@ -5,18 +5,30 @@ import java.util.Objects;
 
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
-import io.realm.annotations.Required;
 
-public class User  extends RealmObject implements Serializable {
+public class User extends RealmObject implements Serializable {
     @PrimaryKey
     private Integer id;
-    @Required
+
     private String email;
-    @Required
+
     private String password;
-    @Required
-    private String name;
+
+    private String firstName;
+
+    private String lastName;
+
+    private String phone;
     private UserType type;
+
+    public User(String email, String password) {
+        this.email = email;
+        this.password = password;
+        this.type = new UserType("user");
+    }
+
+    public User() {
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -58,12 +70,28 @@ public class User  extends RealmObject implements Serializable {
         this.password = password;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public UserType getType() {
@@ -73,12 +101,4 @@ public class User  extends RealmObject implements Serializable {
     public void setType(UserType type) {
         this.type = type;
     }
-
-    public User(String email,String password){
-        this.email=email;
-        this.password=password;
-        this.type=new UserType("user");
-    }
-
-    public User(){}
 }
