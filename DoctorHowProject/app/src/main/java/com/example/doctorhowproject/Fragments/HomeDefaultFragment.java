@@ -51,8 +51,8 @@ public class HomeDefaultFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         // Check for storage permission
-        if (!checkReadPermission()) {
-            requestReadPermission();
+        if (!checkStoragePermission()) {
+            requestStoragePermission();
         }
 
         // Get the listings from database and build the recycler view
@@ -90,16 +90,16 @@ public class HomeDefaultFragment extends Fragment {
         mRealm.close();
     }
 
-    private boolean checkReadPermission() {
+    private boolean checkStoragePermission() {
         return ContextCompat.checkSelfPermission(mActivity,
                 Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
     }
 
-    private void requestReadPermission() {
+    private void requestStoragePermission() {
         // Code for permission check and show dialog in case there is none
         if (ActivityCompat.shouldShowRequestPermissionRationale(mActivity,
                 Manifest.permission.READ_EXTERNAL_STORAGE)) {
-            new AlertDialog.Builder(mActivity)
+            new AlertDialog.Builder(getContext())
                     .setTitle("Permission needed")
                     .setMessage("We need this permission so we can read the listings from internal storage")
                     .setPositiveButton("ok", new DialogInterface.OnClickListener() {
@@ -124,6 +124,7 @@ public class HomeDefaultFragment extends Fragment {
                     GenericConstants.READ_STORAGE_PERMISSION_CODE);
         }
     }
+
 
     private void buildRecyclerView() {
         ListingsAdapter adapter = new ListingsAdapter(mListings);

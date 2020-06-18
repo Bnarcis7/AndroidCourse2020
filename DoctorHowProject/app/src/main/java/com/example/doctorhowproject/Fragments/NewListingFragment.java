@@ -129,8 +129,9 @@ public class NewListingFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (!checkWritePermission()) {
-            requestWritePermission();
+        if (!checkStoragePermission()) {
+            requestStoragePermission();
+            mActivity.getSupportFragmentManager().popBackStack();
         }
     }
 
@@ -237,11 +238,8 @@ public class NewListingFragment extends Fragment {
 
     private void makeFolder() {
         if (!mDestinationFolder.exists()) {
-            if (!mDestinationFolder.mkdirs()) {
-                Toast.makeText(getContext(),
-                        "Failed to mkdir " + mDestinationFolder.getPath(),
-                        Toast.LENGTH_SHORT)
-                        .show();
+            if(mDestinationFolder.mkdirs()) {
+                Toast.makeText(getContext(),"Mkdir ok",Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -254,24 +252,24 @@ public class NewListingFragment extends Fragment {
                 .commit();
     }
 
-    private boolean checkWritePermission() {
+    private boolean checkStoragePermission() {
         return ContextCompat.checkSelfPermission(mActivity,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+                Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
     }
 
-    private void requestWritePermission() {
+    private void requestStoragePermission() {
         // Code for permission check and show dialog in case there is none
         if (ActivityCompat.shouldShowRequestPermissionRationale(mActivity,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            new AlertDialog.Builder(mActivity)
+                Manifest.permission.READ_EXTERNAL_STORAGE)) {
+            new AlertDialog.Builder(getContext())
                     .setTitle("Permission needed")
-                    .setMessage("We need this permission so we can save this image in the server side")
+                    .setMessage("We need this permission so we can read the listings from internal storage")
                     .setPositiveButton("ok", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             ActivityCompat.requestPermissions(mActivity,
-                                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                                    GenericConstants.WRITE_STORAGE_PERMISSION_CODE);
+                                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                                    GenericConstants.READ_STORAGE_PERMISSION_CODE);
                         }
                     })
                     .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
@@ -284,8 +282,8 @@ public class NewListingFragment extends Fragment {
                     .show();
         } else {
             ActivityCompat.requestPermissions(mActivity,
-                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                    GenericConstants.WRITE_STORAGE_PERMISSION_CODE);
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    GenericConstants.READ_STORAGE_PERMISSION_CODE);
         }
     }
 }
