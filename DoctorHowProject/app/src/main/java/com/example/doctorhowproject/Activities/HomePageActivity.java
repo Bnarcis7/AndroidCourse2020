@@ -1,5 +1,8 @@
 package com.example.doctorhowproject.Activities;
 
+import android.Manifest;
+import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -9,8 +12,11 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -19,6 +25,7 @@ import com.example.doctorhowproject.Fragments.HomeDefaultFragment;
 import com.example.doctorhowproject.Fragments.UserProfileFragment;
 import com.example.doctorhowproject.Models.User;
 import com.example.doctorhowproject.R;
+import com.example.doctorhowproject.Utils.GenericConstants;
 import com.google.android.material.navigation.NavigationView;
 
 import io.realm.Realm;
@@ -31,6 +38,7 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_home_page);
