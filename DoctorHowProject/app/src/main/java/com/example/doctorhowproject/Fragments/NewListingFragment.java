@@ -130,6 +130,7 @@ public class NewListingFragment extends Fragment {
     public void onResume() {
         super.onResume();
         if (!checkStoragePermission()) {
+            Toast.makeText(getContext(), "No permission", Toast.LENGTH_SHORT).show();
             requestStoragePermission();
             mActivity.getSupportFragmentManager().popBackStack();
         }
@@ -254,13 +255,13 @@ public class NewListingFragment extends Fragment {
 
     private boolean checkStoragePermission() {
         return ContextCompat.checkSelfPermission(mActivity,
-                Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
     }
 
     private void requestStoragePermission() {
         // Code for permission check and show dialog in case there is none
         if (ActivityCompat.shouldShowRequestPermissionRationale(mActivity,
-                Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             new AlertDialog.Builder(getContext())
                     .setTitle("Permission needed")
                     .setMessage("We need this permission so we can read the listings from internal storage")
@@ -268,8 +269,8 @@ public class NewListingFragment extends Fragment {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             ActivityCompat.requestPermissions(mActivity,
-                                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                                    GenericConstants.READ_STORAGE_PERMISSION_CODE);
+                                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                    GenericConstants.WRITE_STORAGE_PERMISSION_CODE);
                         }
                     })
                     .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
@@ -282,8 +283,8 @@ public class NewListingFragment extends Fragment {
                     .show();
         } else {
             ActivityCompat.requestPermissions(mActivity,
-                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                    GenericConstants.READ_STORAGE_PERMISSION_CODE);
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    GenericConstants.WRITE_STORAGE_PERMISSION_CODE);
         }
     }
 }

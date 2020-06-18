@@ -6,6 +6,8 @@ import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,15 +19,12 @@ import com.example.doctorhowproject.ViewHolders.ListingsViewHolder;
 import java.util.ArrayList;
 
 
-public class ListingsAdapter extends RecyclerView.Adapter<ListingsViewHolder> {
+public class ListingsAdapter extends RecyclerView.Adapter<ListingsViewHolder> implements Filterable {
 
     public ArrayList<Listing> listings;
+    public ArrayList<Listing> listingsFull;
     private ViewGroup parent;
     private OnItemClickListener listener;
-
-    public ListingsAdapter(ArrayList<Listing> listings) {
-        this.listings = listings;
-    }
 
     @NonNull
     @Override
@@ -52,11 +51,53 @@ public class ListingsAdapter extends RecyclerView.Adapter<ListingsViewHolder> {
         return listings.size();
     }
 
+    private Filter listFilter=new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence charSequence) {
+            ArrayList<Listing> filteredList = new ArrayList<>();
+
+            if(charSequence == null || charSequence.length()==0){
+                filteredList.addAll(listingsFull);
+            }
+            else{
+                String filterPattern=charSequence.toString().toLowerCase().trim();
+
+                for(Listing i : listingsFull){
+                    if(i.getTitle().toLowerCase().contains(filterPattern)){
+                        filteredList.add(i);
+                    }
+                }
+            }
+
+            FilterResults results=new FilterResults();
+            results.values = filteredList;
+
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+            listings.clear();
+            listings.addAll((ArrayList)filterResults.values);
+            notifyDataSetChanged();
+        }
+    };
+
+    @Override
+    public Filter getFilter() {
+        return listFilter;
+    }
+
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
     }
 
     public interface OnItemClickListener {
         void onItemClick(int position);
+    }
+
+    public ListingsAdapter(ArrayList<Listing> listings) {
+        this.listings = listings;
+        listingsFull= new ArrayList<>(listings);
     }
 }

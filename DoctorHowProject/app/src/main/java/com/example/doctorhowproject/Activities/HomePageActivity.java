@@ -1,22 +1,20 @@
 package com.example.doctorhowproject.Activities;
 
-import android.Manifest;
-import android.content.DialogInterface;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -25,7 +23,7 @@ import com.example.doctorhowproject.Fragments.HomeDefaultFragment;
 import com.example.doctorhowproject.Fragments.UserProfileFragment;
 import com.example.doctorhowproject.Models.User;
 import com.example.doctorhowproject.R;
-import com.example.doctorhowproject.Utils.GenericConstants;
+
 import com.google.android.material.navigation.NavigationView;
 
 import io.realm.Realm;
