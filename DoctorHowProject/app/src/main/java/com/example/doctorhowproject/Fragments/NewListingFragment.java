@@ -132,6 +132,9 @@ public class NewListingFragment extends Fragment {
         if (!checkWritePermission()) {
             requestWritePermission();
         }
+        if(!checkWritePermission()){
+            mActivity.getSupportFragmentManager().popBackStack();
+        }
     }
 
     @Override
@@ -237,11 +240,7 @@ public class NewListingFragment extends Fragment {
 
     private void makeFolder() {
         if (!mDestinationFolder.exists()) {
-            if (!mDestinationFolder.mkdirs()) {
-                Toast.makeText(getContext(),
-                        "Failed to mkdir " + mDestinationFolder.getPath(),
-                        Toast.LENGTH_SHORT)
-                        .show();
+            mDestinationFolder.mkdirs(); {
             }
         }
     }
