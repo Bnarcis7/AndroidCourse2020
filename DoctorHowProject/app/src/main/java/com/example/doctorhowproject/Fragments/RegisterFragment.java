@@ -14,7 +14,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
+import com.example.doctorhowproject.Models.DoctorCodes;
 import com.example.doctorhowproject.Models.User;
+import com.example.doctorhowproject.Models.UserType;
 import com.example.doctorhowproject.R;
 import com.example.doctorhowproject.Utils.GenericConstants;
 
@@ -26,6 +28,7 @@ public class RegisterFragment extends Fragment {
     private EditText mEmail;
     private EditText mPhone;
     private EditText mPassword;
+    private EditText mDoctorCode;
     private FragmentActivity mActivity;
     private Realm mRealm;
 
@@ -41,14 +44,13 @@ public class RegisterFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //GET TEXT VIEWS
         mFirstName = mActivity.findViewById(R.id.register_first_txt);
         mLastName = mActivity.findViewById(R.id.register_last_txt);
         mEmail = mActivity.findViewById(R.id.register_email_txt);
         mPhone = mActivity.findViewById(R.id.register_phone);
         mPassword = mActivity.findViewById(R.id.register_password_txt);
+        mDoctorCode = mActivity.findViewById(R.id.register_doctor_code);
 
-        //GET BUTTONS
         Button registerBtn = mActivity.findViewById(R.id.register_btn);
         Button backBtn = mActivity.findViewById(R.id.register_back_btn);
 
@@ -62,8 +64,36 @@ public class RegisterFragment extends Fragment {
                     user.setFirstName(mFirstName.getText().toString().trim());
                     user.setLastName(mLastName.getText().toString().trim());
                     user.setPhone(mPhone.getText().toString().trim());
-                    addUser(user);
-                    goToLogin();
+
+                    switch (checkDoctorCode()) {
+                        case 2: {
+                            UserType doctorType = mRealm.where(UserType.class)
+                                    .equalTo("type", "Doctor")
+                                    .findFirst();
+                            user.setType(doctorType);
+                            addUser(user);
+                            goToLogin();
+                            break;
+                        }
+
+
+                        case 1: {
+                            UserType userType = mRealm.where(UserType.class)
+                                    .equalTo("type", "User")
+                                    .findFirst();
+                            user.setType(userType);
+                            addUser(user);
+                            goToLogin();
+                            break;
+                        }
+
+                        case 3: {
+                            Toast.makeText(getContext(),
+                                    "Invalid code, please leave blank field" +
+                                            " or a correct code", Toast.LENGTH_SHORT)
+                                    .show();
+                        }
+                    }
                 }
             }
         });
@@ -92,7 +122,7 @@ public class RegisterFragment extends Fragment {
         if (email.length() == 0) {
             Toast.makeText(this.getContext(),
                     GenericConstants.NULL_FIELDS,
-                    Toast.LENGTH_LONG)
+                    Toast.LENGTH_SHORT)
                     .show();
             return false;
         }
@@ -100,7 +130,7 @@ public class RegisterFragment extends Fragment {
         if (password.length() == 0) {
             Toast.makeText(this.getContext(),
                     GenericConstants.NULL_FIELDS,
-                    Toast.LENGTH_LONG)
+                    Toast.LENGTH_SHORT)
                     .show();
             return false;
         }
@@ -108,7 +138,7 @@ public class RegisterFragment extends Fragment {
         if (firstName.length() == 0) {
             Toast.makeText(this.getContext(),
                     GenericConstants.NULL_FIELDS,
-                    Toast.LENGTH_LONG)
+                    Toast.LENGTH_SHORT)
                     .show();
             return false;
         }
@@ -116,7 +146,7 @@ public class RegisterFragment extends Fragment {
         if (lastName.length() == 0) {
             Toast.makeText(this.getContext(),
                     GenericConstants.NULL_FIELDS,
-                    Toast.LENGTH_LONG)
+                    Toast.LENGTH_SHORT)
                     .show();
             return false;
         }
@@ -124,7 +154,7 @@ public class RegisterFragment extends Fragment {
         if (phone.length() == 0) {
             Toast.makeText(this.getContext(),
                     GenericConstants.NULL_FIELDS,
-                    Toast.LENGTH_LONG)
+                    Toast.LENGTH_SHORT)
                     .show();
             return false;
         }
@@ -132,7 +162,7 @@ public class RegisterFragment extends Fragment {
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             Toast.makeText(this.getContext(),
                     GenericConstants.INCORRECT_EMAIL,
-                    Toast.LENGTH_LONG)
+                    Toast.LENGTH_SHORT)
                     .show();
             return false;
         }
@@ -140,12 +170,31 @@ public class RegisterFragment extends Fragment {
         if (!Patterns.PHONE.matcher(phone).matches()) {
             Toast.makeText(this.getContext(),
                     GenericConstants.INCORRECT_PHONE,
-                    Toast.LENGTH_LONG)
+                    Toast.LENGTH_SHORT)
                     .show();
             return false;
         }
 
+        if (mRealm.where(User.class).equalTo("email", email).findFirst() == null) {
+            Toast.makeText(this.getContext(),
+                    GenericConstants.USER_ALREADY_EXIST, Toast.LENGTH_SHORT);
+        }
+
         return true;
+    }
+
+    private int checkDoctorCode() {
+        String code = mDoctorCode.getText().toString().trim();
+        if (code.length() == 0) {
+            return 1; // In case the field is empty => register as user
+        }
+        DoctorCodes doctorCode = mRealm.where(DoctorCodes.class)
+                .equalTo("code", code)
+                .findFirst();
+        if (doctorCode != null) {
+            return 2; // In case code is ok => register as doctor
+        }
+        return 3; // Else code is not ok => ask for empty field or ok code
     }
 
     private void addUser(final User user) {

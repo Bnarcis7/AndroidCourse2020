@@ -67,6 +67,7 @@ public class NewListingFragment extends Fragment {
 
         mTitle = mActivity.findViewById(R.id.new_listing_title);
         mPhone = mActivity.findViewById(R.id.new_listing_phone);
+        mPhone.setText(mActivity.getUser().getPhone());
         mDetails = mActivity.findViewById(R.id.new_listing_details);
         mImages = new ArrayList<>();
 

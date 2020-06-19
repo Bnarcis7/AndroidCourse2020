@@ -64,28 +64,32 @@ public class HomeDefaultFragment extends Fragment {
         // Get the listings from database and build the recycler view
         mListings = new ArrayList<>();
         refreshListings();
-        mAdapter=new ListingsAdapter(mListings);
+        mAdapter = new ListingsAdapter(mListings);
         buildRecyclerView();
 
         FloatingActionButton floatingBtn = mActivity.findViewById(R.id.floating_button);
-        final SwipeRefreshLayout swipeRefreshLayout = mActivity.findViewById(R.id.home_refresh_layout);
+        if (mActivity.getUser().getType().getType().equals("User")) {
+            floatingBtn.setVisibility(View.INVISIBLE);
+        } else {
+            floatingBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    NewListingFragment fragment = new NewListingFragment();
+                    mActivity.getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container, fragment, "new_listing_fragment")
+                            .addToBackStack(fragment.toString())
+                            .commit();
+                }
+            });
+        }
 
-        floatingBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NewListingFragment fragment = new NewListingFragment();
-                mActivity.getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, fragment, "new_listing_fragment")
-                        .addToBackStack(fragment.toString())
-                        .commit();
-            }
-        });
+        final SwipeRefreshLayout swipeRefreshLayout = mActivity.findViewById(R.id.home_refresh_layout);
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 refreshListings();
-                mRecyclerView.setAdapter(mAdapter);
+                mRecyclerView.getAdapter().notifyDataSetChanged();
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
@@ -105,6 +109,29 @@ public class HomeDefaultFragment extends Fragment {
             requestStoragePermission();
             mActivity.getSupportFragmentManager().popBackStack();
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        MenuInflater menuInflater = mActivity.getMenuInflater();
+        inflater.inflate(R.menu.search_menu,menu);
+
+        MenuItem searchItem = menu.findItem(R.id.search_action);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                mAdapter.getFilter().filter(s);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+        });
     }
 
     private boolean checkStoragePermission() {
@@ -143,14 +170,13 @@ public class HomeDefaultFragment extends Fragment {
     }
 
     private void buildRecyclerView() {
-        ListingsAdapter adapter = new ListingsAdapter(mListings);
         LinearLayoutManager layoutManager = new LinearLayoutManager(mActivity);
 
         mRecyclerView = mActivity.findViewById(R.id.recycler_view_listings);
-        mRecyclerView.setAdapter(adapter);
+        mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(layoutManager);
 
-        adapter.setOnItemClickListener(new ListingsAdapter.OnItemClickListener() {
+        mAdapter.setOnItemClickListener(new ListingsAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
                 Listing selectedListing = mListings.get(position);
@@ -183,28 +209,5 @@ public class HomeDefaultFragment extends Fragment {
 
     public void setAdapter(ListingsAdapter mAdapter) {
         this.mAdapter = mAdapter;
-    }
-
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-            MenuInflater menuInflater=mActivity.getMenuInflater();
-            inflater.inflate(R.menu.search_menu,menu);
-
-            MenuItem searchItem=menu.findItem(R.id.search_action);
-            SearchView searchView = (SearchView) searchItem.getActionView();
-
-            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                @Override
-                public boolean onQueryTextSubmit(String s) {
-                    mAdapter.getFilter().filter(s);
-                    return false;
-                }
-
-                @Override
-                public boolean onQueryTextChange(String s) {
-                    return false;
-                }
-            });
     }
 }

@@ -7,7 +7,7 @@ public class GenericConstants {
     public static final String INCORRECT_EMAIL = "Invalid email address";
     public static final String INCORRECT_PHONE = "Invalid phone";
     public static final String INCORRECT_DATA = "The email or password is not correct";
-    public static final String USER_ALREADY_EXIST = "User already exist";
+    public static final String USER_ALREADY_EXIST = "There is an user with this email already";
     public static final String USER_NOT_EXIST = "User not found";
     public static final String SUCCESS = "Success";
     public static final String READ_USER_FAILED = "Unable to fetch userDetails";
