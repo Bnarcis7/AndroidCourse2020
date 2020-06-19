@@ -3,6 +3,8 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
-    <color name="appColour">#106bbc</color>
-    <color name="phoneNumberColour">#BDBDBD</color>
+    <color name="appColor">#106bbc</color>
+    <color name="appColorLight">#6E9BC3</color>
+    <color name="phoneNumberColor">#BDBDBD</color>
+    <color name="drawerToggleColor">#FFF</color>
 </resources>

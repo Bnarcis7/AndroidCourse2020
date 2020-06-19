@@ -31,6 +31,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
+import io.realm.Case;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -123,12 +124,19 @@ public class HomeDefaultFragment extends Fragment {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
-                mAdapter.getFilter().filter(s);
+                mListings.clear();
+                filterListings(s);
+                mAdapter.notifyDataSetChanged();
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String s) {
+                if (s.length() == 0) {
+                    mListings.clear();
+                    getAllListings();
+                    mAdapter.notifyDataSetChanged();
+                }
                 return false;
             }
         });
@@ -193,14 +201,31 @@ public class HomeDefaultFragment extends Fragment {
 
     private void refreshListings() {
         mListings.clear();
-        mListings.addAll(getAllListings());
+        getAllListings();
     }
 
-    private ArrayList<Listing> getAllListings() {
-        RealmResults<Listing> query = mRealm.where(Listing.class)
-                .findAll();
+    private void getAllListings() {
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmResults<Listing> query = mRealm.where(Listing.class)
+                        .findAll();
+                mListings.addAll(query);
+            }
+        });
+    }
 
-        return new ArrayList<Listing>(query);
+    private void filterListings(final String charSequence) {
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmResults<Listing> query = mRealm.where(Listing.class)
+                        .contains("title", charSequence, Case.INSENSITIVE)
+                        .findAll();
+                mListings.addAll(query);
+            }
+        });
+
     }
 
     public ListingsAdapter getAdapter() {

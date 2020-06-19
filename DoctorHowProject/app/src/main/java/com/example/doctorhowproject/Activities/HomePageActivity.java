@@ -70,6 +70,7 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
                 toolbar,
                 R.string.navigation_drawer_open,
                 R.string.navigation_drawer_close);
+        toggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.drawerToggleColor));
         mDrawer.addDrawerListener(toggle);
         toggle.syncState();
     }
@@ -143,14 +144,15 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
 
     public void setUser(User user) {
         this.mUser = user;
-        if (user != null) {
-            mNavEmail.setText(mUser.getEmail());
-            mNamName.setText(mUser.getFirstName());
-        }
     }
 
     public ArrayList<Listing> getFavorites() {
         return mFavorites;
+    }
+
+    public void updateUserView(){
+        mNavEmail.setText(mUser.getEmail());
+        mNamName.setText(mUser.getFirstName());
     }
 
     public void setFavorites(ArrayList<Listing> mFavorites) {

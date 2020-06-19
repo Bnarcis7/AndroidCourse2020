@@ -2,25 +2,27 @@ package com.example.doctorhowproject.Fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.doctorhowproject.Activities.HomePageActivity;
 import com.example.doctorhowproject.Adapters.ListingsAdapter;
 import com.example.doctorhowproject.Models.Listing;
 import com.example.doctorhowproject.R;
 
-import java.util.ArrayList;
-
+import io.realm.Case;
 import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class FavoritesFragment extends Fragment {
 
@@ -72,5 +74,61 @@ public class FavoritesFragment extends Fragment {
                         .commit();
             }
         });
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+
+        MenuInflater menuInflater = mActivity.getMenuInflater();
+        inflater.inflate(R.menu.search_menu, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.search_action);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                mActivity.getFavorites().clear();
+                filterListings(s);
+                mAdapter.notifyDataSetChanged();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                if (s.length() == 0) {
+                    mActivity.getFavorites().clear();
+                    getAllListings();
+                    mAdapter.notifyDataSetChanged();
+                }
+                return false;
+            }
+        });
+
+    }
+
+    private void getAllListings() {
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmResults<Listing> query = mRealm.where(Listing.class)
+                        .findAll();
+                mActivity.getFavorites().addAll(query);
+            }
+        });
+    }
+
+    private void filterListings(final String charSequence) {
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmResults<Listing> query = mRealm.where(Listing.class)
+                        .contains("title", charSequence, Case.INSENSITIVE)
+                        .findAll();
+                mActivity.getFavorites().addAll(query);
+            }
+        });
+
     }
 }

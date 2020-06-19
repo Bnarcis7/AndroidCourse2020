@@ -19,6 +19,8 @@ import com.example.doctorhowproject.Adapters.ImageAdapter;
 import com.example.doctorhowproject.Models.Listing;
 import com.example.doctorhowproject.R;
 
+import java.io.File;
+
 import io.realm.Realm;
 
 public class ListingFragment extends Fragment {
@@ -130,6 +132,14 @@ public class ListingFragment extends Fragment {
     }
 
     private void removeListing() {
+        // Deleted images from image folder for this listing
+        for (String i : mListing.getImagesPaths()) {
+            File file = new File(i);
+            if (file.exists()) {
+                file.delete();
+            }
+        }
+
         mRealm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {

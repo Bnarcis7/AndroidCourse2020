@@ -19,8 +19,8 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
-            android:background="@color/appColour"
-            android:elevation="4dp"
+            android:background="@color/appColor"
+            android:elevation="@dimen/default_elevation"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
             <ImageView
