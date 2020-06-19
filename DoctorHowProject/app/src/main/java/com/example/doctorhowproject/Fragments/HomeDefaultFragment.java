@@ -5,8 +5,12 @@ import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -35,7 +39,14 @@ public class HomeDefaultFragment extends Fragment {
     private HomePageActivity mActivity;
     private Realm mRealm;
     private ArrayList<Listing> mListings;
+    private ListingsAdapter mAdapter;
     private RecyclerView mRecyclerView;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,35 +61,35 @@ public class HomeDefaultFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Check for storage permission
-        if (!checkStoragePermission()) {
-            requestStoragePermission();
-        }
-
         // Get the listings from database and build the recycler view
         mListings = new ArrayList<>();
         refreshListings();
+        mAdapter = new ListingsAdapter(mListings);
         buildRecyclerView();
 
         FloatingActionButton floatingBtn = mActivity.findViewById(R.id.floating_button);
-        final SwipeRefreshLayout swipeRefreshLayout = mActivity.findViewById(R.id.home_refresh_layout);
+        if (mActivity.getUser().getType().getType().equals("User")) {
+            floatingBtn.setVisibility(View.INVISIBLE);
+        } else {
+            floatingBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    NewListingFragment fragment = new NewListingFragment();
+                    mActivity.getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container, fragment, "new_listing_fragment")
+                            .addToBackStack(fragment.toString())
+                            .commit();
+                }
+            });
+        }
 
-        floatingBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NewListingFragment fragment = new NewListingFragment();
-                mActivity.getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, fragment, "new_listing_fragment")
-                        .addToBackStack(fragment.toString())
-                        .commit();
-            }
-        });
+        final SwipeRefreshLayout swipeRefreshLayout = mActivity.findViewById(R.id.home_refresh_layout);
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 refreshListings();
-                mRecyclerView.setAdapter(new ListingsAdapter(mListings));
+                mRecyclerView.getAdapter().notifyDataSetChanged();
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
@@ -90,15 +101,48 @@ public class HomeDefaultFragment extends Fragment {
         mRealm.close();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Check for storage permission
+        if (!checkStoragePermission()) {
+            requestStoragePermission();
+            mActivity.getSupportFragmentManager().popBackStack();
+        }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        MenuInflater menuInflater = mActivity.getMenuInflater();
+        inflater.inflate(R.menu.search_menu,menu);
+
+        MenuItem searchItem = menu.findItem(R.id.search_action);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                mAdapter.getFilter().filter(s);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+        });
+    }
+
     private boolean checkStoragePermission() {
         return ContextCompat.checkSelfPermission(mActivity,
-                Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
     }
 
     private void requestStoragePermission() {
         // Code for permission check and show dialog in case there is none
         if (ActivityCompat.shouldShowRequestPermissionRationale(mActivity,
-                Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             new AlertDialog.Builder(getContext())
                     .setTitle("Permission needed")
                     .setMessage("We need this permission so we can read the listings from internal storage")
@@ -106,8 +150,8 @@ public class HomeDefaultFragment extends Fragment {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             ActivityCompat.requestPermissions(mActivity,
-                                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                                    GenericConstants.READ_STORAGE_PERMISSION_CODE);
+                                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                    GenericConstants.WRITE_STORAGE_PERMISSION_CODE);
                         }
                     })
                     .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
@@ -120,21 +164,19 @@ public class HomeDefaultFragment extends Fragment {
                     .show();
         } else {
             ActivityCompat.requestPermissions(mActivity,
-                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                    GenericConstants.READ_STORAGE_PERMISSION_CODE);
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    GenericConstants.WRITE_STORAGE_PERMISSION_CODE);
         }
     }
 
-
     private void buildRecyclerView() {
-        ListingsAdapter adapter = new ListingsAdapter(mListings);
         LinearLayoutManager layoutManager = new LinearLayoutManager(mActivity);
 
         mRecyclerView = mActivity.findViewById(R.id.recycler_view_listings);
-        mRecyclerView.setAdapter(adapter);
+        mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(layoutManager);
 
-        adapter.setOnItemClickListener(new ListingsAdapter.OnItemClickListener() {
+        mAdapter.setOnItemClickListener(new ListingsAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
                 Listing selectedListing = mListings.get(position);
@@ -159,5 +201,13 @@ public class HomeDefaultFragment extends Fragment {
                 .findAll();
 
         return new ArrayList<Listing>(query);
+    }
+
+    public ListingsAdapter getAdapter() {
+        return mAdapter;
+    }
+
+    public void setAdapter(ListingsAdapter mAdapter) {
+        this.mAdapter = mAdapter;
     }
 }

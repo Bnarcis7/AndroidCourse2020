@@ -1,5 +1,7 @@
 package com.example.doctorhowproject.Models;
 
+import java.util.Objects;
+
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -77,5 +79,19 @@ public class Listing extends RealmObject {
 
     public void setImagesPaths(RealmList<String> imagesPaths) {
         this.imagesPaths = imagesPaths;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Listing listing = (Listing) o;
+        return Objects.equals(id, listing.id) &&
+                Objects.equals(owner, listing.owner);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, owner);
     }
 }

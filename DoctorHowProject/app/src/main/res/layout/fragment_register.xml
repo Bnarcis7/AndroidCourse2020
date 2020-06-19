@@ -51,6 +51,14 @@
         android:backgroundTint="@color/appColour"
         android:hint="Password" />
 
+    <EditText
+        android:id="@+id/register_doctor_code"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="@color/appColour"
+        android:hint="Doctor code (optional)" />
+
     <Button
         android:id="@+id/register_btn"
         android:layout_width="wrap_content"

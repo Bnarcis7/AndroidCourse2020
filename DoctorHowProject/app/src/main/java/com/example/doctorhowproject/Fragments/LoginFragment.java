@@ -20,6 +20,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.doctorhowproject.Activities.HomePageActivity;
+import com.example.doctorhowproject.Models.Listing;
 import com.example.doctorhowproject.Models.User;
 import com.example.doctorhowproject.R;
 import com.example.doctorhowproject.Utils.GenericConstants;
@@ -31,6 +32,7 @@ public class LoginFragment extends Fragment {
     private EditText mPasswordTxt;
     private EditText mEmailTxt;
     private Realm mRealm;
+    private User mUser;
     private FragmentActivity mActivity;
     private CheckBox mShowPassword;
 
@@ -68,15 +70,17 @@ public class LoginFragment extends Fragment {
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                User user = validateFields();
-                if (user != null) {
+                mUser = validateFields();
+                if (mUser != null) {
                     // Replace the user with only email and password with the one with full info
                     // from database
-                    user = findUserByEmailPassword(user);
-                    if (user != null) {
-                        goToHomePage(user);
+                    findUserByEmailPassword();
+
+                    if (mUser != null) {
+                        goToHomePage();
                         return;
                     }
+
                     Toast.makeText(getContext(),
                             GenericConstants.USER_NOT_EXIST,
                             Toast.LENGTH_LONG).show();
@@ -129,26 +133,27 @@ public class LoginFragment extends Fragment {
         return new User(email, password);
     }
 
-    private User findUserByEmailPassword(final User user) {
-        RealmResults<User> query = mRealm.where(User.class)
-                .equalTo("email", user.getEmail())
-                .equalTo("password", user.getPassword())
-                .findAll();
-
-        if (query.isLoaded()) {
-            if (query.size() == 0) {
-                return null;
+    private void findUserByEmailPassword() {
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmResults<User> query = mRealm.where(User.class)
+                        .equalTo("email", mUser.getEmail())
+                        .equalTo("password", mUser.getPassword())
+                        .findAll();
+                if(query.size() ==0){
+                    mUser=null;
+                    return;
+                }
+                mUser=query.get(0);
             }
-            return query.get(0);
-        }
-
-        return null;
+        });
     }
 
-    private void goToHomePage(User user) {
+    private void goToHomePage() {
         // Pass only user id to the next activity
         Intent intent = new Intent(mActivity, HomePageActivity.class);
-        intent.putExtra("userId", user.getId());
+        intent.putExtra("userId", mUser.getId());
         mActivity.startActivity(intent);
         mActivity.finish();
     }
