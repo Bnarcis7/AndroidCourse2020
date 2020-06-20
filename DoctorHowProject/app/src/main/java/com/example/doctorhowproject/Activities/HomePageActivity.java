@@ -92,6 +92,7 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
                 UserProfileFragment fragment = new UserProfileFragment();
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, fragment, "user_profile_fragment")
+                        .addToBackStack(fragment.toString())
                         .commit();
                 break;
             }
@@ -100,6 +101,7 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
                 FavoritesFragment fragment = new FavoritesFragment();
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, fragment, "favorites_fragment")
+                        .addToBackStack(fragment.toString())
                         .commit();
                 break;
             }
@@ -108,6 +110,7 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
                 HomeDefaultFragment fragment = new HomeDefaultFragment();
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, fragment, "home_fragment")
+                        .addToBackStack(fragment.toString())
                         .commit();
                 break;
             }
@@ -149,12 +152,12 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
         return mFavorites;
     }
 
-    public void updateUserView(){
-        mNavEmail.setText(mUser.getEmail());
-        mNamName.setText(mUser.getFirstName());
-    }
-
     public void setFavorites(ArrayList<Listing> mFavorites) {
         this.mFavorites = mFavorites;
+    }
+
+    public void updateUserView() {
+        mNavEmail.setText(mUser.getEmail());
+        mNamName.setText(mUser.getFirstName());
     }
 }

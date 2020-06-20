@@ -6,9 +6,15 @@
     android:background="@android:color/white"
     tools:context=".Fragments.FavoritesFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_favorites"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/favorites_refresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_favorites"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </RelativeLayout>
