@@ -1,8 +1,5 @@
 package com.example.doctorhowproject.Activities;
 
-import android.Manifest;
-import android.content.DialogInterface;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,40 +9,42 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.doctorhowproject.Fragments.FavoritesFragment;
 import com.example.doctorhowproject.Fragments.HomeDefaultFragment;
 import com.example.doctorhowproject.Fragments.UserProfileFragment;
+import com.example.doctorhowproject.Models.Listing;
 import com.example.doctorhowproject.Models.User;
 import com.example.doctorhowproject.R;
-import com.example.doctorhowproject.Utils.GenericConstants;
 import com.google.android.material.navigation.NavigationView;
+
+import java.util.ArrayList;
 
 import io.realm.Realm;
 
 public class HomePageActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout mDrawer;
+    private ArrayList<Listing> mFavorites;
+    private TextView mNavEmail;
+    private TextView mNamName;
     private User mUser;
     private Realm mRealm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        super.onCreate(savedInstanceState);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_home_page);
         mRealm = Realm.getDefaultInstance();
+        mFavorites=new ArrayList<>();
 
         int id = (int) getIntent().getSerializableExtra("userId");
-        mUser = findUserById(id);
+        findUserById(id);
         mRealm.close();
         // Open listings fragment as default fragment
         openListingsFragment();
@@ -58,10 +57,11 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
         NavigationView navView = findViewById(R.id.nav_view);
         navView.setNavigationItemSelectedListener(this);
         View headerView = navView.getHeaderView(0);
-        TextView nav_email = headerView.findViewById(R.id.nav_txt_email);
-        TextView nav_name = headerView.findViewById(R.id.nav_txt_name);
-        nav_email.setText(mUser.getEmail());
-        nav_name.setText(mUser.getFirstName());
+
+        mNavEmail = headerView.findViewById(R.id.nav_email);
+        mNamName = headerView.findViewById(R.id.nav_name);
+        mNavEmail.setText(mUser.getEmail());
+        mNamName.setText(mUser.getFirstName());
 
         // Add action bar drawer to layout
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,
@@ -69,6 +69,7 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
                 toolbar,
                 R.string.navigation_drawer_open,
                 R.string.navigation_drawer_close);
+        toggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.drawerToggleColor));
         mDrawer.addDrawerListener(toggle);
         toggle.syncState();
     }
@@ -124,19 +125,36 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
                 .commit();
     }
 
-    private User findUserById(int id) {
-        User query = mRealm.where(User.class)
-                .equalTo("id", id)
-                .findFirst();
-
-        return mRealm.copyFromRealm(query);
+    private void findUserById(final int id) {
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+               User user= mRealm.where(User.class)
+                        .equalTo("id",id)
+                        .findFirstAsync();
+                mUser=mRealm.copyFromRealm(user);
+            }
+        });
     }
 
     public User getUser() {
         return mUser;
     }
 
-    public void setUser(User mUser) {
-        this.mUser = mUser;
+    public void setUser(User user) {
+        this.mUser = user;
+    }
+
+    public ArrayList<Listing> getFavorites() {
+        return mFavorites;
+    }
+
+    public void updateUserView(){
+        mNavEmail.setText(mUser.getEmail());
+        mNamName.setText(mUser.getFirstName());
+    }
+
+    public void setFavorites(ArrayList<Listing> mFavorites) {
+        this.mFavorites = mFavorites;
     }
 }

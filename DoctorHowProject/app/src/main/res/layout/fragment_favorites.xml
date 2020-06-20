@@ -6,10 +6,9 @@
     android:background="@android:color/white"
     tools:context=".Fragments.FavoritesFragment">
 
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_favorites"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="FAVORITES FRAGMENT TEST" />
+        android:layout_height="match_parent" />
 
 </RelativeLayout>

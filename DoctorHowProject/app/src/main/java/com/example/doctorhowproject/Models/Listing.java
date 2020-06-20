@@ -1,5 +1,7 @@
 package com.example.doctorhowproject.Models;
 
+import java.util.Objects;
+
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -11,6 +13,7 @@ public class Listing extends RealmObject {
     private String details;
     private String phone;
     private String title;
+    private String address;
     private RealmList<String> imagesPaths;
 
     public Listing() {
@@ -20,7 +23,6 @@ public class Listing extends RealmObject {
     public Listing(String title, RealmList<String> imagesPaths) {
         this.imagesPaths = imagesPaths;
         this.title = title;
-
     }
 
     public Listing(String title, RealmList<String> imagesPaths, String phone, User owner, String details) {
@@ -63,6 +65,14 @@ public class Listing extends RealmObject {
         this.phone = phone;
     }
 
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     public String getTitle() {
         return title;
     }
@@ -77,5 +87,19 @@ public class Listing extends RealmObject {
 
     public void setImagesPaths(RealmList<String> imagesPaths) {
         this.imagesPaths = imagesPaths;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Listing listing = (Listing) o;
+        return Objects.equals(id, listing.id) &&
+                Objects.equals(owner, listing.owner);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, owner);
     }
 }

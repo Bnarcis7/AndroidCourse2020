@@ -19,13 +19,9 @@ import java.util.ArrayList;
 
 public class ListingsAdapter extends RecyclerView.Adapter<ListingsViewHolder> {
 
-    public ArrayList<Listing> listings;
+    public ArrayList<Listing> listings; // All the listings
     private ViewGroup parent;
     private OnItemClickListener listener;
-
-    public ListingsAdapter(ArrayList<Listing> listings) {
-        this.listings = listings;
-    }
 
     @NonNull
     @Override
@@ -40,9 +36,14 @@ public class ListingsAdapter extends RecyclerView.Adapter<ListingsViewHolder> {
         Listing currentListing = listings.get(position);
         holder.title.setText(currentListing.getTitle());
 
+        String ownerText = "Dr." +
+                currentListing.getOwner().getFirstName() +
+                " " +
+                currentListing.getOwner().getLastName();
+        holder.owner.setText(ownerText);
+
         if (currentListing.getImagesPaths().size() != 0) {
             Bitmap bmImg = BitmapFactory.decodeFile(currentListing.getImagesPaths().get(0));
-            bmImg = Bitmap.createScaledBitmap(bmImg, 500, 500, true);
             holder.image.setImageBitmap(bmImg);
         }
     }
@@ -58,5 +59,9 @@ public class ListingsAdapter extends RecyclerView.Adapter<ListingsViewHolder> {
 
     public interface OnItemClickListener {
         void onItemClick(int position);
+    }
+
+    public ListingsAdapter(ArrayList<Listing> listings) {
+        this.listings = listings;
     }
 }

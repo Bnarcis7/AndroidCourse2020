@@ -16,50 +16,59 @@
            android:id="@+id/new_listing_title"
            android:layout_width="0dp"
            android:layout_height="wrap_content"
-           android:hint="Title"
-           android:layout_margin="30dp"
-           android:backgroundTint="@color/appColour"
+           android:backgroundTint="@color/appColor"
+           android:layout_margin="@dimen/login_layout_margin"
+           android:hint="@string/title_txt"
            app:layout_constraintTop_toTopOf="parent"
            app:layout_constraintLeft_toLeftOf="parent"
            app:layout_constraintRight_toRightOf="parent"
-
-           android:textSize="30sp" />
+           android:textSize="@dimen/big_text_size" />
 
        <EditText
            android:id="@+id/new_listing_phone"
            android:layout_width="0dp"
            android:layout_height="wrap_content"
-           android:hint="Phone"
-           android:layout_margin="30dp"
-           android:backgroundTint="@color/appColour"
+           android:backgroundTint="@color/appColor"
+           android:layout_margin="@dimen/login_layout_margin"
+           android:hint="@string/phone_txt"
            app:layout_constraintTop_toBottomOf="@id/new_listing_title"
-
            app:layout_constraintLeft_toLeftOf="parent"
            app:layout_constraintRight_toRightOf="parent"
-           android:textSize="20sp" />
+           android:textSize="@dimen/default_text_size" />
+
+       <EditText
+           android:id="@+id/new_listing_address"
+           android:layout_width="0dp"
+           android:layout_height="wrap_content"
+           android:backgroundTint="@color/appColor"
+           android:layout_margin="@dimen/login_layout_margin"
+           android:hint="@string/address_text"
+           app:layout_constraintTop_toBottomOf="@id/new_listing_phone"
+           app:layout_constraintLeft_toLeftOf="parent"
+           app:layout_constraintRight_toRightOf="parent"
+           android:textSize="@dimen/default_text_size" />
 
        <EditText
            android:id="@+id/new_listing_details"
            android:layout_width="0dp"
            android:layout_height="wrap_content"
-           android:hint="Details"
-           android:layout_margin="30dp"
-           android:backgroundTint="@color/appColour"
-           app:layout_constraintTop_toBottomOf="@id/new_listing_phone"
+           android:backgroundTint="@color/appColor"
+           android:layout_margin="@dimen/login_layout_margin"
+           android:hint="@string/description_txt"
+           app:layout_constraintTop_toBottomOf="@id/new_listing_address"
            app:layout_constraintLeft_toLeftOf="parent"
            app:layout_constraintRight_toRightOf="parent"
-
-           android:textSize="20sp" />
+           android:textSize="@dimen/default_text_size" />
 
        <Button
            android:id="@+id/new_listing_images_btn"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
-           android:layout_margin="20dp"
-           android:text="Pick images"
+           android:layout_margin="@dimen/default_margin"
+           android:text="@string/pick_images_button"
            android:background="@drawable/custom_button"
-           android:elevation="4dp"
-           android:padding="10dp"
+           android:elevation="@dimen/default_elevation"
+           android:padding="@dimen/medium_padding"
            android:textColor="@android:color/white"
            app:layout_constraintTop_toBottomOf="@id/new_listing_details"
            app:layout_constraintLeft_toLeftOf="parent"
@@ -70,10 +79,10 @@
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
            android:layout_gravity="end|bottom"
-           android:backgroundTint="@color/appColour"
+           android:backgroundTint="@color/appColor"
            android:src="@drawable/ic_finish_listing"
-           android:contentDescription="Finish"
-           android:layout_margin="16dp"
+           android:contentDescription="@string/finish_button"
+           android:layout_margin="@dimen/default_margin"
            app:layout_constraintBottom_toBottomOf="parent"
            app:layout_constraintRight_toRightOf="parent"
            />

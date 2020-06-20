@@ -1,31 +1,31 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="176dp"
+    android:layout_height="@dimen/nav_header_height"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_gravity="top"
-    android:background="#2677DA"
+    android:background="@color/appColor"
     android:orientation="vertical"
-    android:padding="16dp"
+    android:padding="@dimen/login_layout_padding"
     android:theme="@style/ThemeOverlay.AppCompat.Dark"
     tools:context=".Activities.HomePageActivity">
 
     <TextView
-        android:id="@+id/nav_txt_name"
+        android:id="@+id/nav_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="8dp"
-        android:text="Name"
-        android:textSize="24sp"
+        android:paddingTop="@dimen/medium_padding"
+        android:text="@string/user_first_name_ph"
+        android:textSize="@dimen/nav_header_big_text_size"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         />
 
     <TextView
-        android:id="@+id/nav_txt_email"
+        android:id="@+id/nav_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="8dp"
-        android:text="email@test.com"
-        android:textSize="20sp"
+        android:paddingTop="@dimen/medium_padding"
+        android:text="@string/user_email_ph"
+        android:textSize="@dimen/default_text_size"
         />
 
 </LinearLayout>

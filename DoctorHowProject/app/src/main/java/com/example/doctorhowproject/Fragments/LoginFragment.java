@@ -31,6 +31,7 @@ public class LoginFragment extends Fragment {
     private EditText mPasswordTxt;
     private EditText mEmailTxt;
     private Realm mRealm;
+    private User mUser;
     private FragmentActivity mActivity;
     private CheckBox mShowPassword;
 
@@ -68,15 +69,17 @@ public class LoginFragment extends Fragment {
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                User user = validateFields();
-                if (user != null) {
+                mUser = validateFields();
+                if (mUser != null) {
                     // Replace the user with only email and password with the one with full info
                     // from database
-                    user = findUserByEmailPassword(user);
-                    if (user != null) {
-                        goToHomePage(user);
+                    findUserByEmailPassword();
+
+                    if (mUser != null) {
+                        goToHomePage();
                         return;
                     }
+
                     Toast.makeText(getContext(),
                             GenericConstants.USER_NOT_EXIST,
                             Toast.LENGTH_LONG).show();
@@ -129,26 +132,29 @@ public class LoginFragment extends Fragment {
         return new User(email, password);
     }
 
-    private User findUserByEmailPassword(final User user) {
-        RealmResults<User> query = mRealm.where(User.class)
-                .equalTo("email", user.getEmail())
-                .equalTo("password", user.getPassword())
-                .findAll();
+    private void findUserByEmailPassword() {
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                User query = mRealm.where(User.class)
+                        .equalTo("email", mUser.getEmail())
+                        .equalTo("password", mUser.getPassword())
+                        .findFirst();
 
-        if (query.isLoaded()) {
-            if (query.size() == 0) {
-                return null;
+                if (query == null) {
+                    mUser = null;
+                    return;
+                }
+                else
+                mUser = query;
             }
-            return query.get(0);
-        }
-
-        return null;
+        });
     }
 
-    private void goToHomePage(User user) {
+    private void goToHomePage() {
         // Pass only user id to the next activity
         Intent intent = new Intent(mActivity, HomePageActivity.class);
-        intent.putExtra("userId", user.getId());
+        intent.putExtra("userId", mUser.getId());
         mActivity.startActivity(intent);
         mActivity.finish();
     }

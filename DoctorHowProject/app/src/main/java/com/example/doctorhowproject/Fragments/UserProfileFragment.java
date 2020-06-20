@@ -62,13 +62,12 @@ public class UserProfileFragment extends Fragment {
             public void onClick(View view) {
                 if (validatePassword()) {
                     if (validateFields()) {
-                        User user = new User();
-                        user.setEmail(mEmail.getText().toString().trim());
-                        user.setFirstName(mFirstName.getText().toString().trim());
-                        user.setLastName(mLastName.getText().toString().trim());
-                        user.setPhone(mPhone.getText().toString().trim());
-                        updateUser(user);
-                        mActivity.setUser(user);
+                        mActivity.getUser().setEmail(mEmail.getText().toString().trim());
+                        mActivity.getUser().setFirstName(mFirstName.getText().toString().trim());
+                        mActivity.getUser().setLastName(mLastName.getText().toString().trim());
+                        mActivity.getUser().setPhone(mPhone.getText().toString().trim());
+                        updateUser(mActivity.getUser());
+                        mActivity.updateUserView();
                         goToHomePage();
                     }
                 } else
