@@ -96,7 +96,6 @@ public class NewListingFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (validateFields()) {
-                    mNewListing.setOwner(mActivity.getUser());
                     mNewListing.setTitle(mTitle.getText().toString().trim());
                     mNewListing.setPhone(mPhone.getText().toString().trim());
                     mNewListing.setDetails(mDetails.getText().toString().trim());

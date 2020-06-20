@@ -14,20 +14,19 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.doctorhowproject.Activities.HomePageActivity;
 import com.example.doctorhowproject.Adapters.ListingsAdapter;
 import com.example.doctorhowproject.Models.Listing;
 import com.example.doctorhowproject.R;
 
-import io.realm.Case;
-import io.realm.Realm;
-import io.realm.RealmResults;
+import java.util.ArrayList;
 
 public class FavoritesFragment extends Fragment {
 
     private HomePageActivity mActivity;
-    private Realm mRealm;
+    private ArrayList<Listing> mFilteredListings;
     private ListingsAdapter mAdapter;
     private RecyclerView mRecyclerView;
 
@@ -41,17 +40,27 @@ public class FavoritesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mActivity = (HomePageActivity) getActivity();
-        mRealm = Realm.getDefaultInstance();
-        mRealm.refresh();
         return inflater.inflate(R.layout.fragment_favorites, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        final SwipeRefreshLayout swipeRefreshLayout = mActivity.findViewById(R.id.favorites_refresh);
 
-        mAdapter = new ListingsAdapter(mActivity.getFavorites());
+        mFilteredListings = new ArrayList<>(mActivity.getFavorites());
+        mAdapter = new ListingsAdapter(mFilteredListings);
         buildRecyclerView();
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mFilteredListings.clear();
+                mFilteredListings.addAll(mActivity.getFavorites());
+                mAdapter.notifyDataSetChanged();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
     }
 
     private void buildRecyclerView() {
@@ -89,7 +98,6 @@ public class FavoritesFragment extends Fragment {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
-                mActivity.getFavorites().clear();
                 filterListings(s);
                 mAdapter.notifyDataSetChanged();
                 return false;
@@ -98,37 +106,27 @@ public class FavoritesFragment extends Fragment {
             @Override
             public boolean onQueryTextChange(String s) {
                 if (s.length() == 0) {
-                    mActivity.getFavorites().clear();
                     getAllListings();
                     mAdapter.notifyDataSetChanged();
                 }
                 return false;
             }
         });
-
     }
 
     private void getAllListings() {
-        mRealm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmResults<Listing> query = mRealm.where(Listing.class)
-                        .findAllAsync();
-                mActivity.getFavorites().addAll(query);
-            }
-        });
+        mFilteredListings.clear();
+        mFilteredListings.addAll(mActivity.getFavorites());
     }
 
     private void filterListings(final String charSequence) {
-        mRealm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmResults<Listing> query = mRealm.where(Listing.class)
-                        .contains("title", charSequence, Case.INSENSITIVE)
-                        .findAllAsync();
-                mActivity.getFavorites().addAll(query);
+        mFilteredListings.clear();
+        for (Listing i : mActivity.getFavorites()) {
+            if (i.getTitle().toLowerCase().trim().contains(charSequence.toLowerCase().trim())) {
+                mFilteredListings.add(i);
             }
-        });
+        }
+
 
     }
 }
