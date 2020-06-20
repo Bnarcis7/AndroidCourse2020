@@ -26,20 +26,22 @@
             android:id="@+id/favorite_listing_line"
             android:layout_width="match_parent"
             android:layout_height="@dimen/line_view_height"
-            android:layout_marginLeft="@dimen/default_margin"
-            android:layout_marginRight="@dimen/default_margin"
+            android:layout_marginStart="@dimen/default_margin"
+            android:layout_marginTop="@dimen/small_margin"
+            android:layout_marginEnd="@dimen/default_margin"
+            android:layout_marginBottom="@dimen/small_margin"
             android:background="@android:color/white"
-            app:layout_constraintTop_toBottomOf="@id/favorite_listing_phone"
-            app:layout_constraintBottom_toTopOf="@id/favorite_listing_description"/>
+            app:layout_constraintBottom_toTopOf="@id/favorite_listing_description"
+            app:layout_constraintTop_toBottomOf="@id/favorite_listing_address" />
 
         <TextView
             android:id="@+id/favorite_listing_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:padding="@dimen/default_padding"
             android:text="@string/title_txt"
             android:layout_marginLeft="@dimen/default_margin"
             android:layout_marginTop="@dimen/small_margin"
-            android:padding="@dimen/default_padding"
             android:layout_marginRight="@dimen/default_margin"
             android:textColor="@android:color/white"
             android:textSize="@dimen/big_text_size"
@@ -53,33 +55,37 @@
             android:id="@+id/favorite_listing_phone"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/small_margin"
+            android:layout_marginEnd="@dimen/default_margin"
             android:text="@string/phone_txt"
             android:layout_marginStart="@dimen/default_margin"
-            android:clickable="true"
+            android:layout_marginBottom="@dimen/small_margin"
             android:padding="@dimen/default_padding"
+            android:clickable="true"
             android:textColor="@color/phoneNumberColor"
             android:textSize="@dimen/small_text_size"
             app:layout_constraintTop_toBottomOf="@id/favorite_listing_title"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/favorite_listing_line"
-            app:layout_constraintRight_toLeftOf="@id/favorite_listing_email"
-            />
+            app:layout_constraintBottom_toTopOf="@id/favorite_listing_email"
+            app:layout_constraintRight_toRightOf="parent" />
 
         <TextView
             android:id="@+id/favorite_listing_email"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="20dp"
+            android:layout_marginStart="@dimen/default_margin"
+            android:layout_marginTop="@dimen/small_margin"
+            android:layout_marginEnd="@dimen/default_margin"
+            android:layout_marginBottom="@dimen/small_margin"
             android:text="@string/email_txt"
             android:clickable="true"
             android:padding="@dimen/default_padding"
             android:textColor="@color/phoneNumberColor"
             android:textSize="@dimen/small_text_size"
-            app:layout_constraintTop_toBottomOf="@id/favorite_listing_title"
-            app:layout_constraintLeft_toRightOf="@id/favorite_listing_phone"
+            app:layout_constraintBottom_toTopOf="@id/favorite_listing_address"
+            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/favorite_listing_line"
-            />
+            app:layout_constraintTop_toBottomOf="@id/favorite_listing_phone" />
 
         <TextView
             android:id="@+id/favorite_listing_description"
@@ -98,6 +104,24 @@
 
             />
 
+        <TextView
+            android:id="@+id/favorite_listing_address"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_margin"
+            android:layout_marginTop="@dimen/small_margin"
+            android:layout_marginEnd="@dimen/default_margin"
+            android:layout_marginBottom="@dimen/small_margin"
+            android:clickable="true"
+            android:padding="@dimen/default_padding"
+            android:text="@string/address_text"
+            android:textColor="@color/phoneNumberColor"
+            android:textSize="@dimen/small_text_size"
+            app:layout_constraintBottom_toTopOf="@id/favorite_listing_line"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/favorite_listing_email" />
+
         <Button
             android:id="@+id/favorite_listing_call_button"
             android:layout_width="wrap_content"
@@ -110,8 +134,7 @@
             android:textColor="@android:color/white"
             app:layout_constraintTop_toBottomOf="@id/favorite_listing_description"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/favorite_listing_email_button"
-            app:layout_constraintBottom_toTopOf="@id/favorite_listing_remove_button" />
+            app:layout_constraintRight_toLeftOf="@id/favorite_listing_email_button" />
 
         <Button
             android:id="@+id/favorite_listing_email_button"
@@ -126,9 +149,7 @@
             app:layout_constraintLeft_toRightOf="@id/favorite_listing_call_button"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/favorite_listing_description"
-            app:layout_constraintBottom_toTopOf="@id/favorite_listing_remove_button"
             />
-
         <Button
             android:id="@+id/favorite_listing_remove_button"
             android:layout_width="wrap_content"
@@ -139,6 +160,7 @@
             android:paddingRight="@dimen/big_padding"
             android:text="@string/remove_favorite_button"
             android:textColor="@android:color/white"
+            app:layout_constraintTop_toBottomOf="@id/favorite_listing_call_button"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>

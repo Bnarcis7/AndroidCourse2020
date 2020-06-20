@@ -6,7 +6,7 @@
     android:background="@color/appColor"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fillViewport="true"
-    tools:context=".Fragments.ListingFragment">
+    tools:context=".Fragments.FavoriteListingFragment">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -163,7 +163,7 @@
             android:background="@drawable/custom_logout_button"
             android:paddingLeft="@dimen/big_padding"
             android:paddingRight="@dimen/big_padding"
-            android:text="@string/remove_button"
+            android:text="@string/remove_favorite_button"
             android:textColor="@android:color/white"
             app:layout_constraintTop_toBottomOf="@id/favorite_listing_call_button"
             app:layout_constraintLeft_toLeftOf="parent"

@@ -31,4 +31,6 @@
     <string name="owner_ph">Owner</string>
     <string name="address_text">Address</string>
 
+    <string name="google_API_key">AIzaSyDky3pHYUvLKNzD8iW9jIA3lpAtz582L8g</string>
+
 </resources>
