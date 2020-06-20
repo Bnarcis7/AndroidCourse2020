@@ -198,19 +198,18 @@ public class RegisterFragment extends Fragment {
     private int checkDoctorCode() {
         String code = mDoctorCode.getText().toString().trim();
         if (code.length() == 0) {
-            return 1; // In case the field is empty => register as user
+            return 1;
         }
         DoctorCodes doctorCode = mRealm.where(DoctorCodes.class)
                 .equalTo("code", code)
                 .findFirst();
         if (doctorCode != null) {
-            return 2; // In case code is ok => register as doctor
+            return 2;
         }
-        return 3; // Else code is not ok => ask for empty field or ok code
+        return 3;
     }
 
     private void addUser(final User user) {
-        // Search for max id in the table, if there is none, set the id to 1
         mRealm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {

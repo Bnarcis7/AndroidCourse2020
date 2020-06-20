@@ -26,7 +26,8 @@ import java.util.ArrayList;
 
 import io.realm.Realm;
 
-public class HomePageActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class
+HomePageActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout mDrawer;
     private ArrayList<Listing> mFavorites;
     private TextView mNavEmail;
@@ -63,7 +64,6 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
         mNavEmail.setText(mUser.getEmail());
         mNamName.setText(mUser.getFirstName());
 
-        // Add action bar drawer to layout
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,
                 mDrawer,
                 toolbar,
@@ -76,7 +76,6 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
 
     @Override
     public void onBackPressed() {
-        // When back pressed, close the navigation menu first
         if (mDrawer.isDrawerOpen(GravityCompat.START)) {
             mDrawer.closeDrawer(GravityCompat.START);
         } else {
@@ -86,7 +85,6 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        // Navigation menu menu items clicks
         switch (menuItem.getItemId()) {
             case R.id.nav_profile: {
                 UserProfileFragment fragment = new UserProfileFragment();
