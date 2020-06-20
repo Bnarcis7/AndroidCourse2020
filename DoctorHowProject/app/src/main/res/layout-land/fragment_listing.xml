@@ -6,7 +6,7 @@
     android:background="@color/appColor"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fillViewport="true"
-    tools:context=".Fragments.ListingFragment">
+    tools:context=".Fragments.FavoriteListingFragment">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -139,7 +139,7 @@
             app:layout_constraintTop_toBottomOf="@id/favorite_listing_description"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@id/favorite_listing_email_button"
-             />
+            />
 
         <Button
             android:id="@+id/favorite_listing_email_button"

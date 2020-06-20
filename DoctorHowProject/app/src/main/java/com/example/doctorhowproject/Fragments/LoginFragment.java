@@ -20,7 +20,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.doctorhowproject.Activities.HomePageActivity;
-import com.example.doctorhowproject.Models.Listing;
 import com.example.doctorhowproject.Models.User;
 import com.example.doctorhowproject.R;
 import com.example.doctorhowproject.Utils.GenericConstants;
@@ -137,15 +136,17 @@ public class LoginFragment extends Fragment {
         mRealm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                RealmResults<User> query = mRealm.where(User.class)
+                User query = mRealm.where(User.class)
                         .equalTo("email", mUser.getEmail())
                         .equalTo("password", mUser.getPassword())
-                        .findAll();
-                if(query.size() ==0){
-                    mUser=null;
+                        .findFirst();
+
+                if (query == null) {
+                    mUser = null;
                     return;
                 }
-                mUser=query.get(0);
+                else
+                mUser = query;
             }
         });
     }

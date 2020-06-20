@@ -36,9 +36,8 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        super.onCreate(savedInstanceState);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_home_page);
         mRealm = Realm.getDefaultInstance();
@@ -132,7 +131,7 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
             public void execute(Realm realm) {
                User user= mRealm.where(User.class)
                         .equalTo("id",id)
-                        .findFirst();
+                        .findFirstAsync();
                 mUser=mRealm.copyFromRealm(user);
             }
         });

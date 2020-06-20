@@ -113,7 +113,7 @@ public class FavoritesFragment extends Fragment {
             @Override
             public void execute(Realm realm) {
                 RealmResults<Listing> query = mRealm.where(Listing.class)
-                        .findAll();
+                        .findAllAsync();
                 mActivity.getFavorites().addAll(query);
             }
         });
@@ -125,7 +125,7 @@ public class FavoritesFragment extends Fragment {
             public void execute(Realm realm) {
                 RealmResults<Listing> query = mRealm.where(Listing.class)
                         .contains("title", charSequence, Case.INSENSITIVE)
-                        .findAll();
+                        .findAllAsync();
                 mActivity.getFavorites().addAll(query);
             }
         });

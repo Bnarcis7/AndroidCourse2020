@@ -191,7 +191,6 @@ public class HomeDefaultFragment extends Fragment {
                 ListingFragment fragment = new ListingFragment(selectedListing);
                 mActivity.getSupportFragmentManager()
                         .beginTransaction()
-                        .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_right)
                         .replace(R.id.fragment_container, fragment, "listing_fragment")
                         .addToBackStack(fragment.toString())
                         .commit();
@@ -209,7 +208,7 @@ public class HomeDefaultFragment extends Fragment {
             @Override
             public void execute(Realm realm) {
                 RealmResults<Listing> query = mRealm.where(Listing.class)
-                        .findAll();
+                        .findAllAsync();
                 mListings.addAll(query);
             }
         });
@@ -221,7 +220,7 @@ public class HomeDefaultFragment extends Fragment {
             public void execute(Realm realm) {
                 RealmResults<Listing> query = mRealm.where(Listing.class)
                         .contains("title", charSequence, Case.INSENSITIVE)
-                        .findAll();
+                        .findAllAsync();
                 mListings.addAll(query);
             }
         });

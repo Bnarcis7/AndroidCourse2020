@@ -13,6 +13,7 @@ public class Listing extends RealmObject {
     private String details;
     private String phone;
     private String title;
+    private String address;
     private RealmList<String> imagesPaths;
 
     public Listing() {
@@ -22,7 +23,6 @@ public class Listing extends RealmObject {
     public Listing(String title, RealmList<String> imagesPaths) {
         this.imagesPaths = imagesPaths;
         this.title = title;
-
     }
 
     public Listing(String title, RealmList<String> imagesPaths, String phone, User owner, String details) {
@@ -63,6 +63,14 @@ public class Listing extends RealmObject {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getTitle() {

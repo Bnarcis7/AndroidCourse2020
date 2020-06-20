@@ -29,5 +29,6 @@
     <string name="create_account">Create account</string>
     <string name="back_button">Back</string>
     <string name="owner_ph">Owner</string>
+    <string name="address_text">Address</string>
 
 </resources>

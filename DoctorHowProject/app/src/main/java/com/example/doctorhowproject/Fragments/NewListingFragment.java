@@ -45,6 +45,7 @@ public class NewListingFragment extends Fragment {
     private EditText mTitle;
     private EditText mPhone;
     private EditText mDetails;
+    private EditText mAddress;
     private Listing mNewListing;
     private File mDestinationFolder;
     private ArrayList<Bitmap> mImages;
@@ -66,9 +67,12 @@ public class NewListingFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         mTitle = mActivity.findViewById(R.id.new_listing_title);
+        mDetails = mActivity.findViewById(R.id.new_listing_details);
+        mAddress = mActivity.findViewById(R.id.new_listing_address);
+
         mPhone = mActivity.findViewById(R.id.new_listing_phone);
         mPhone.setText(mActivity.getUser().getPhone());
-        mDetails = mActivity.findViewById(R.id.new_listing_details);
+
         mImages = new ArrayList<>();
 
         mNewListing = new Listing();
@@ -96,6 +100,7 @@ public class NewListingFragment extends Fragment {
                     mNewListing.setTitle(mTitle.getText().toString().trim());
                     mNewListing.setPhone(mPhone.getText().toString().trim());
                     mNewListing.setDetails(mDetails.getText().toString().trim());
+                    mNewListing.setAddress(mAddress.getText().toString().trim());
                     mNewListing.setOwner(mActivity.getUser());
 
                     for (Bitmap i : mImages) {
@@ -114,7 +119,20 @@ public class NewListingFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == GenericConstants.PICK_IMAGE_REQUEST_CODE) {
-                if (data != null) {
+                if(data.getClipData() !=null){
+                    int count = data.getClipData().getItemCount();
+                    for(int i =0;i<count;i++){
+                        Uri uri=data.getClipData().getItemAt(i).getUri();
+                        try {
+                            Bitmap bitmap = MediaStore.Images.Media.getBitmap(mActivity.getContentResolver(), uri);
+                            mImages.add(bitmap);
+                        } catch (IOException e) {
+                            Toast.makeText(getContext(), e.toString(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+                else
+                if (data.getData() != null) {
                     Uri uri = data.getData();
                     try {
                         Bitmap bitmap = MediaStore.Images.Media.getBitmap(mActivity.getContentResolver(), uri);
@@ -177,10 +195,11 @@ public class NewListingFragment extends Fragment {
     private void pickFromGallery() {
         Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
         photoPickerIntent.setType("image/*");
+        photoPickerIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,true);
         startActivityForResult(photoPickerIntent, GenericConstants.PICK_IMAGE_REQUEST_CODE);
     }
 
-    private void setListingId() {
+    private void setListingId()     {
         mRealm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -212,10 +231,6 @@ public class NewListingFragment extends Fragment {
             image.compress(Bitmap.CompressFormat.JPEG, 90, out);
             out.flush();
             out.close();
-            Toast.makeText(getContext(),
-                    mDestinationFolder.getPath() + "/" + mediaFile.getName(),
-                    Toast.LENGTH_LONG)
-                    .show();
         } catch (Exception e) {
             Toast.makeText(getContext(),
                     e.toString(),

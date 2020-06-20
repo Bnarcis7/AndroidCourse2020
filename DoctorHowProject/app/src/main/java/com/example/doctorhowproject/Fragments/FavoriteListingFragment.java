@@ -1,5 +1,6 @@
 package com.example.doctorhowproject.Fragments;
 
+import android.content.ComponentName;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -37,6 +38,7 @@ public class FavoriteListingFragment extends Fragment {
         final TextView phone = mActivity.findViewById(R.id.favorite_listing_phone);
         TextView email = mActivity.findViewById(R.id.favorite_listing_email);
         TextView description = mActivity.findViewById(R.id.favorite_listing_description);
+        TextView address = mActivity.findViewById(R.id.favorite_listing_address);
 
         ViewPager viewPager = mActivity.findViewById(R.id.favorite_listing_images);
         Button callBtn = mActivity.findViewById(R.id.favorite_listing_call_button);
@@ -50,6 +52,7 @@ public class FavoriteListingFragment extends Fragment {
         phone.setText(mListing.getPhone());
         description.setText(mListing.getDetails());
         email.setText(mListing.getOwner().getEmail());
+        address.setText(mListing.getAddress());
 
         phone.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,6 +72,17 @@ public class FavoriteListingFragment extends Fragment {
                 intent.putExtra(Intent.EXTRA_SUBJECT, mListing.getTitle());
                 intent.putExtra(Intent.EXTRA_TEXT, "Buna ziua! As dori mai multe informatii legate de anunt.");
                 startActivity(Intent.createChooser(intent, ""));
+            }
+        });
+
+        address.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://maps.google.com/maps?f=d&daddr="+mListing.getAddress()));
+                intent.setComponent(new ComponentName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity"));
+                if (intent.resolveActivity(mActivity.getPackageManager()) != null) {
+                    startActivity(intent);
+                }
             }
         });
 

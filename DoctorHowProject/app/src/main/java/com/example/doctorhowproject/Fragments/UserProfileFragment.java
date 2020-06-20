@@ -87,7 +87,6 @@ public class UserProfileFragment extends Fragment {
         });
     }
 
-
     private boolean validateFields() {
         String email = mEmail.getText().toString().trim();
         String password = mPassword.getText().toString().trim();
@@ -159,10 +158,9 @@ public class UserProfileFragment extends Fragment {
     }
 
     private void updateUser(final User user) {
-        mRealm.executeTransaction(new Realm.Transaction() {
+        mRealm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(@NonNull Realm realm) {
-
                 realm.insertOrUpdate(user);
             }
         });

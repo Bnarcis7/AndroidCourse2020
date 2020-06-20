@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Fragments.UserProfileFragment"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/appColorLight"
+        android:padding="@dimen/big_padding"
+        >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/user_constraint_1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/medium_padding"
+            android:background="@drawable/custom_user_profile_background"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/user_first_txt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/first_txt"
+                android:textSize="@dimen/default_text_size"
+                android:textColor="@color/appColor"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/user_first_name"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/user_first_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/appColor"
+                android:textSize="@dimen/default_text_size"
+                android:text="@string/user_last_name_ph"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/user_first_txt"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/user_constraint_2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_margin"
+            android:padding="@dimen/medium_padding"
+            android:background="@drawable/custom_user_profile_background"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/user_constraint_1">
+
+            <TextView
+                android:id="@+id/user_last_txt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/last_txt"
+                android:textSize="@dimen/default_text_size"
+                android:textColor="@color/appColor"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/user_last_name"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/user_last_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/appColor"
+                android:textSize="@dimen/default_text_size"
+                android:text="@string/user_last_name_ph"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/user_last_txt"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/user_constraint_3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/medium_padding"
+            android:background="@drawable/custom_user_profile_background"
+            android:layout_marginTop="@dimen/default_margin"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/user_constraint_2">
+
+            <TextView
+                android:id="@+id/user_email_txt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/email_txt"
+                android:textSize="@dimen/default_text_size"
+                android:textColor="@color/appColor"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/user_email"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/user_email"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/appColor"
+                android:textSize="@dimen/default_text_size"
+                android:text="@string/user_email_ph"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/user_email_txt"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/user_constraint_4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/medium_padding"
+            android:background="@drawable/custom_user_profile_background"
+            android:layout_marginTop="@dimen/default_margin"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/user_constraint_3">
+
+            <TextView
+                android:id="@+id/user_phone_txt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/phone_txt"
+                android:textSize="@dimen/default_text_size"
+                android:textColor="@color/appColor"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/user_phone"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/user_phone"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/appColor"
+                android:textSize="@dimen/default_text_size"
+                android:text="@string/user_email_ph"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/user_phone_txt"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/user_constraint_5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/medium_padding"
+            android:background="@drawable/custom_user_profile_background"
+            android:layout_marginTop="@dimen/default_margin"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/user_constraint_4">
+
+            <TextView
+                android:id="@+id/user_password_txt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/password_txt"
+                android:textSize="@dimen/default_text_size"
+                android:textColor="@color/appColor"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/user_password"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/user_password"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:backgroundTint="@color/appColor"
+                android:text="@string/user_password_ph"
+                android:textSize="@dimen/default_text_size"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/user_password_txt"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <Button
+            android:id="@+id/user_update_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/big_margin"
+            android:text="@string/update_info_button"
+            android:background="@drawable/custom_button"
+            android:textColor="@android:color/white"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/user_constraint_5" />
+
+        <Button
+            android:id="@+id/user_logout_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_margin"
+            android:text="@string/logout_button"
+            android:background="@drawable/custom_logout_button"
+            android:textColor="@android:color/white"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/user_update_btn" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

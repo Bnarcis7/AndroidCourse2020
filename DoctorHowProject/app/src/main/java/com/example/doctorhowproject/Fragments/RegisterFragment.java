@@ -14,11 +14,21 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.doctorhowproject.Models.DoctorCodes;
 import com.example.doctorhowproject.Models.User;
 import com.example.doctorhowproject.Models.UserType;
 import com.example.doctorhowproject.R;
 import com.example.doctorhowproject.Utils.GenericConstants;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import io.realm.Realm;
 
@@ -43,6 +53,8 @@ public class RegisterFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        //addFromHttps("https://randomname.de/?format=json&count=10&phone=a");
 
         mFirstName = mActivity.findViewById(R.id.register_first_txt);
         mLastName = mActivity.findViewById(R.id.register_last_txt);
@@ -215,8 +227,7 @@ public class RegisterFragment extends Fragment {
                 realm.insertOrUpdate(user);
             }
         });
-
-        Toast.makeText(this.getContext(), GenericConstants.USER_ADDED, Toast.LENGTH_LONG).show();
+        Toast.makeText(this.getContext(), GenericConstants.USER_ADDED, Toast.LENGTH_SHORT).show();
     }
 
     private void goToLogin() {
@@ -225,5 +236,55 @@ public class RegisterFragment extends Fragment {
                 .beginTransaction()
                 .replace(R.id.fragment_container, fragment, "login_fragment")
                 .commit();
+    }
+
+    private void addFromHttps(String url) {
+        RequestQueue queue = Volley.newRequestQueue(getContext());
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            handleResponse(response);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getContext(), "That didnt work :(", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
+    }
+
+    private void handleResponse(String response) throws JSONException {
+        JSONArray jsonArray = new JSONArray(response);
+
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject currentObject = jsonArray.getJSONObject(i);
+            String firstName = currentObject.getString("firstname");
+            String lastName = currentObject.getString("lastname");
+            String email = currentObject.getString("email");
+            String password = currentObject.getString("password");
+            String phone = currentObject.getString("phone");
+
+            JSONObject phoneObject = new JSONObject(phone);
+            String mobilePhone = phoneObject.getString("mobile");
+
+            User user = new User();
+            user.setFirstName(firstName);
+            user.setLastName(lastName);
+            user.setEmail(email);
+            user.setPassword(password);
+            user.setPhone(mobilePhone);
+            user.setType(new UserType("user"));
+
+            addUser(user);
+        }
     }
 }

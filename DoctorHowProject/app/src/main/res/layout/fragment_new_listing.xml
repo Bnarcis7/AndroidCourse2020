@@ -37,13 +37,25 @@
            android:textSize="@dimen/default_text_size" />
 
        <EditText
+           android:id="@+id/new_listing_address"
+           android:layout_width="0dp"
+           android:layout_height="wrap_content"
+           android:backgroundTint="@color/appColor"
+           android:layout_margin="@dimen/login_layout_margin"
+           android:hint="@string/address_text"
+           app:layout_constraintTop_toBottomOf="@id/new_listing_phone"
+           app:layout_constraintLeft_toLeftOf="parent"
+           app:layout_constraintRight_toRightOf="parent"
+           android:textSize="@dimen/default_text_size" />
+
+       <EditText
            android:id="@+id/new_listing_details"
            android:layout_width="0dp"
            android:layout_height="wrap_content"
            android:backgroundTint="@color/appColor"
            android:layout_margin="@dimen/login_layout_margin"
            android:hint="@string/description_txt"
-           app:layout_constraintTop_toBottomOf="@id/new_listing_phone"
+           app:layout_constraintTop_toBottomOf="@id/new_listing_address"
            app:layout_constraintLeft_toLeftOf="parent"
            app:layout_constraintRight_toRightOf="parent"
            android:textSize="@dimen/default_text_size" />

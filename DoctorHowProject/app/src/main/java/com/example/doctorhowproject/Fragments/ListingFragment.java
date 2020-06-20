@@ -1,5 +1,6 @@
 package com.example.doctorhowproject.Fragments;
 
+import android.content.ComponentName;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -52,7 +54,7 @@ public class ListingFragment extends Fragment {
         final TextView phone = mActivity.findViewById(R.id.listing_phone);
         TextView email = mActivity.findViewById(R.id.listing_email);
         TextView description = mActivity.findViewById(R.id.listing_description);
-
+        TextView address = mActivity.findViewById(R.id.listing_address);
 
         ViewPager viewPager = mActivity.findViewById(R.id.listing_images);
         Button callBtn = mActivity.findViewById(R.id.listing_call_button);
@@ -67,6 +69,7 @@ public class ListingFragment extends Fragment {
         phone.setText(mListing.getPhone());
         description.setText(mListing.getDetails());
         email.setText(mListing.getOwner().getEmail());
+        address.setText(mListing.getAddress());
 
         phone.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,6 +89,17 @@ public class ListingFragment extends Fragment {
                 intent.putExtra(Intent.EXTRA_SUBJECT, mListing.getTitle());
                 intent.putExtra(Intent.EXTRA_TEXT, "Buna ziua! As dori mai multe informatii legate de anunt.");
                 startActivity(Intent.createChooser(intent, ""));
+            }
+        });
+
+        address.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://maps.google.com/maps?f=d&daddr="+mListing.getAddress()));
+                intent.setComponent(new ComponentName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity"));
+                if (intent.resolveActivity(mActivity.getPackageManager()) != null) {
+                    startActivity(intent);
+                }
             }
         });
 
@@ -115,6 +129,7 @@ public class ListingFragment extends Fragment {
             public void onClick(View view) {
                 if(!mActivity.getFavorites().contains(mListing))
                     mActivity.getFavorites().add(mListing);
+                Toast.makeText(getContext(), "Added to favorites", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -144,7 +159,7 @@ public class ListingFragment extends Fragment {
             @Override
             public void execute(Realm realm) {
                 mRealm.where(Listing.class)
-                        .equalTo("id", mListing.getId()).findFirst().deleteFromRealm();
+                        .equalTo("id", mListing.getId()).findFirstAsync().deleteFromRealm();
             }
         });
     }
